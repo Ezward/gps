@@ -4,6 +4,7 @@ I want to race RC cars.  I don't want to actually drive them.  I'd probably suck
 
 <p align="center">
   <img src="img/donkeycar.png" style="height: 50%; width: 50%;" alt="A DonkeyCar" />
+  A DonkeyCar
 </p>
 
 Just kidding, no one would sponsor me.  It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
@@ -16,8 +17,11 @@ U-Blox isn't the only game in town; you can find inexpensive GPS modules that us
 
 U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a piece of software called [U-Center](https://www.u-blox.com/en/product/u-center) that can be used to configure and operate U-Blox based devices.  U-Center is written for Microsoft Windows, but it can be run on Macintosh or Linux using the Wine emulation system.  I've successfully done this on Macintosh.  I'll add a section near the end that describes how to use U-Center and how to set it up on Macintosh.
 
-![U-Center](./img/u-center.png){:height="75%" width="75%" .align-center}
 
+<p align="center">
+  <img src="img/u-center.png" style="height: 75%; width: 75%;" alt="U-Center" />
+  U-Center
+</p>
 
 
 
