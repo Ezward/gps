@@ -4,7 +4,7 @@ I want to race RC cars.  I don't want to actually drive them.  I'd probably suck
 
 <p align="center">
   <img src="img/donkeycar.png" style="height: 50%; width: 50%;" alt="A DonkeyCar" />
-  <p style="display: block">A DonkeyCar</p>
+  <p align="center">A DonkeyCar</p>
 </p>
 
 Just kidding, no one would sponsor me.  It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
