@@ -4,7 +4,7 @@ I want to race RC cars.  I don't want to actually drive them.  I'd probably suck
 
 <p align="center">
   <img src="img/donkeycar.png" style="height: 50%; width: 50%;" alt="A DonkeyCar" />
-  <p>A DonkeyCar</p>
+  <p style="display: block">A DonkeyCar</p>
 </p>
 
 Just kidding, no one would sponsor me.  It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
@@ -20,7 +20,7 @@ U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a
 
 <p align="center">
   <img src="img/u-center.png" style="height: 75%; width: 75%;" alt="U-Center" />
-  <p>U-Center</p>
+  <p align="center">U-Center</p>
 </p>
 
 
