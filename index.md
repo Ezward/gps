@@ -24,9 +24,38 @@ U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a
 
 How accurate is gps?
 
-Good question.  Crappy answer: it depends.  Let's just assume you have a great view of the sky; then [GPSInsight](https://help.gpsinsight.com/deep-dive/how-accurate-is-gps-technology/) suggests that gps should yield an accuracy of 2meters CEP (Circular Error Probability); that means that 50% of readings will fall within a circle with a radius of 2m.  The other 50% will be outside.  This is a bit of a weird way to measure accuracy of gps; this is because CEP assumes a Guassian error distribution.  However, if you make a whole bunch of readings over a period of time while staying in one place, you will notice that the errors are not like they; they are more like a random walk.  In fact, the error not really random; much of it is caused by atmospheric changes; these are not really random, but instead cause the position to look like it is moving on a path over time, even though you stay in one place.  Here is an example I created using the gps code I created for DonkeyCar;
+Good question.  Crappy answer: it depends.  Let's just assume you have a great view of the sky; then [GPSInsight](https://help.gpsinsight.com/deep-dive/how-accurate-is-gps-technology/) suggests that gps should yield an accuracy of 2meters CEP (Circular Error Probability); that means that 50% of readings will fall within a circle with a radius of 2m.  The other 50% will be outside.  This is a bit of a weird way to measure accuracy of gps; this is because CEP assumes a Guassian error distribution.  However, if you make a whole bunch of readings over a period of time while staying in one place, you will notice that the errors are not like they; they are more like a random walk.  In fact, the error not really random; much of it is caused by atmospheric changes; these are not really random, but instead cause the position to look like it is moving on a path over time, even though you stay in one place.  Here is an example I created using the gps code I created for DonkeyCar.  It represents 1 sample per second for 100 seconds;
 
+<p align="center">
+  <img src="img/random_walk.png" style="height: 75%; width: 75%;" alt="Gps position readings over time while staying in place; 1 sample per second for 100 seconds" />
+  <p align="center">Gps position readings over time while staying in place; 1 sample per second for 100 seconds</p>
+</p>
 
+These positions are in [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) units; essentially the position in meters on the surface of the earth.  You can see the readings span about 5 meters vertically and 8.5 meters horizontally.  If we averaged all of these points we would get one measure of the center (the centroid); then we could find the 50 points closest to this center; that would be the CEP.
 
+But the important point is that these are not randomly arranged around the center; instead the position reading is moving around over time like it is walking.  This is because atmospheric affects that change over time. 
+
+Think about this if you are relying on gps readings in order to know where your autonomous car is located; beyond the fact that readings are +/- 4 meters from center, at any given time if you take a few readings it may appear you are quite near a given point, but that is a false assumption. If you keep taking readings and average them, your position will get more accurate, but not in the same way it would if the error was a guassian distribution around a center.  
+
+Here are 1000 readings taken with an U-Blox NEO M8N with an active GPS/GNSS antenna and a good ground plane mounted on a tripod (basically, a good setup; more on antennas and ground planes later).  
+
+<p align="center">
+  <img src="img/m8n_tripod_base_1000_samples.png" style="height: 75%; width: 75%;" alt="U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds" />
+  <p align="center">U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
+</p>
+
+The points are within 25 meter range in each direction.  So that is better than the first figure, which was done with a non-active antenna and no base plane.
+
+Next, this is 1000 readings with a U-Blox ZED F9P an active GPS/GNSS antenna and a good ground plane mounted on a tripod, the same setup as the last set of readings.  
+<p align="center">
+  <img src="img/fp9_tripod_base_1000_samples.png" style="height: 75%; width: 75%;" alt="U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds" />
+  <p align="center">U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
+</p>
+
+The points are within 2.5 meter range vertically and 1.25 meters horizontally.  So that is better than the first figure, which was done with a non-active antenna and no base plane.
+
+This shows the series 9 chipset is superior to the series 8.  But still, this is not accurate enough for navigating a short RC course where the lane may be less than 2 meters wide.  But wait, there is more!
+
+RTK GPS
 
 
