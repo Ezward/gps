@@ -1,5 +1,7 @@
 ## Setting up RTK GPS on a Raspberry Pi
 
+***In process: this content is being created.  It is not yet complete and it has not yet been tested as written.  If you see anything wrong or have a better/another way to do this please open an issue in the github repo.  Thanks.***
+
 I want to race RC cars.  I don't want to actually drive them.  I'd probably suck at it.  I'm really pretty sure about that.  So they have to drive themselves.  There are a bunch a ways to get an RC to drive itself.  When you are outside gps is a good choice, but it has to be the right kind of gps and it must be setup the right way.  You also need software to read and interpret the data sent by the gps.  My automonous RC car uses the [DonkeyCar](https://www.donkeycar.com/) framework for small scale car racing, so I'm adding gps support to that framework.  An autonomous car also needs a computer to run the software.  DonkeyCar supports the Raspberry Pi or the Nvidia Jetson Nano as the brains of the car.  I've tried both, but one worked better than the other for this purpose.  More after this commercial break...
 
 <p align="center">
