@@ -20,7 +20,7 @@ So the gps receiver (more below) gets radio signals from the gps satellites.  Ea
 Next, let's talk about the kinds of gps devices available for talking to the satellite systems.  Since the American GPS system was first early chips only talked to it.  Then when GLONASS came online chips came out that supported both GPS and GLONASS, even simultaneously.  Newer chips support GPS, GLONASS, BeiDou and Galileo and some of the smaller system.  The most popular devices are based on chips created by a company named [U-Blox](https://www.u-blox.com/).  They have lots of different GPS chips for various purposes and with varying capabilities.  Their latest chips are series 10.  You can still find series 6, 7, and 8 out there.  The series 8 chips are much better than 6 or 7; they support more kinds of satellites and more simultaneous satellite connections.  I'm using a device from Sparkfun with a series 9 chipset, the [SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)](https://www.sparkfun.com/products/16481).  The name really rolls off the tongue doesn't it?  Catchy.  Anyway, the ZED-F9P chipset is a big improvement over the NEO-8 series because it supports yet more satellite systems, more simultaneous connections and most importantly, it supports a second frequency band (L2) for higher precision measurements.  Newer is better.  Ask any baby.
 
 <p align="center">
-  <img src="https://cdn.sparkfun.com//assets/parts/1/5/3/5/2/16481-SparkFun_GPS-RTK-SMA_Breakout_-_ZED-F9P__Qwiic_-01a.jpg" style="height: 50%; width: 50%;" alt="SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)" />
+  <img src="https://cdn.sparkfun.com//assets/parts/1/5/3/5/2/16481-SparkFun_GPS-RTK-SMA_Breakout_-_ZED-F9P__Qwiic_-01a.jpg" style="height: 75%; width: 75%;" alt="SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)" />
   <p align="center"><a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a></p>
 </p>
 
@@ -286,7 +286,7 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
 ### The Hardware: An Unexpected Journey
 
 <p align="center">
-  <img src="img/one_does_not_simply_stream" style="height: 75%; width: 75%;" alt="One does not simply stream RTCM3 to GPIO serial." />
+  <img src="img/one_does_not_simply_stream.jpg" style="height: 75%; width: 75%;" alt="One does not simply stream RTCM3 to GPIO serial." />
 </p>
 
 
