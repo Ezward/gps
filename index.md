@@ -15,7 +15,12 @@ First lets talk about gps satellites.  The term GPS (Global Positioning System) 
 So the gps receiver (more below) gets radio signals from the gps satellites.  Each satellite is transmitting a very exact time and it's current position in space.  When the gps receiver gets a time and satellite position, it calculates how long it took the signal to reach the receiver and can then calculate the distance to the satellite.  With 3 satellites the receiver can triangulate it's position on the surface of the Earth.  The reality is a little more complicated because the receiver uses many satellites and the Earth is not flat (glad I got that off my mind), but you get the idea.
 
 ### NEO ZED Blox What?
-Next, let's talk about the kinds of gps devices available for talking to the satellite systems.  Since the American GPS system was first early chips only talked to it.  Then when GLONASS came online chips came out that supported both GPS and GLONASS, even simultaneously.  Newer chips support GPS, GLONASS, BeiDou and Galileo and some of the smaller system.  The most popular devices are based on chips created by a company named [U-Blox](https://www.u-blox.com/).  They have lots of different GPS chips for various purposes and with varying capabilities.  Their latest chips are series 10.  You can still find series 6, 7, and 8 out there.  The series 8 chips are much better than 6 or 7; they support more kinds of satellites and more simultaneous satellite connections.  I'm using a device with a series 9 chipset, the ZED F9P; it is a big improvement over series 8 because it supports yet more satellite systems, more simultaneous connections and most importantly, it supports a second frequency band (L2) for higher precision measurements.  Newer is better.  Ask any baby.
+Next, let's talk about the kinds of gps devices available for talking to the satellite systems.  Since the American GPS system was first early chips only talked to it.  Then when GLONASS came online chips came out that supported both GPS and GLONASS, even simultaneously.  Newer chips support GPS, GLONASS, BeiDou and Galileo and some of the smaller system.  The most popular devices are based on chips created by a company named [U-Blox](https://www.u-blox.com/).  They have lots of different GPS chips for various purposes and with varying capabilities.  Their latest chips are series 10.  You can still find series 6, 7, and 8 out there.  The series 8 chips are much better than 6 or 7; they support more kinds of satellites and more simultaneous satellite connections.  I'm using a device from Sparkfun with a series 9 chipset, the SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic).  It really rolls off the tongue doesn't it?  Catchy.  Anyway, the ZED-F9P is a big improvement over the NEO-8 series because it supports yet more satellite systems, more simultaneous connections and most importantly, it supports a second frequency band (L2) for higher precision measurements.  Newer is better.  Ask any baby.
+
+<p align="center">
+  <img src="https://cdn.sparkfun.com//assets/parts/1/5/3/5/2/16481-SparkFun_GPS-RTK-SMA_Breakout_-_ZED-F9P__Qwiic_-01a.jpg" style="height: 50%; width: 50%;" alt="SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)" />
+  <p align="center"><a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a></p>
+</p>
 
 U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
 
@@ -78,15 +83,15 @@ What if you don't have a fixed base station near enough to you?  That's simple; 
 
 
 ### Client Tell
-Ok, so we have a source of RTCM3 corrections, maybe sent over the Internet using the NTRIP protocol, but our gps receiver doesn't know anything about the Internet; it has serial ports (how 1980s) for communication.  So how do we get the RTCM3 corrections to the gps receiver?
+Ok, so we have a source of RTCM3 corrections, maybe sent over the Internet using the NTRIP protocol, but our gps receiver doesn't know anything about the Internet; it has serial ports (how 1980s) for communication.  How do we get the RTCM3 corrections to the gps receiver's serial ports?  Well we first need an NTRIP client to receive the RTCM corrections, then we write those corrections to a serial port on the gps receiver board either using a direction connection to the RaspberryPi/Jetson Nano or via a radio connected a ZED-F9P serial port.  
 
-Well we first need an NTRIP client to receive the RTCM corrections, then we need to get those corrections to the gps receiver board.  
+The ZED-F9P has several serial ports.  There is a serial port associated with the USB connection; this is very easy to use.  There are two other serial ports to which header pins can be soldered (so less easy).  Remember that picture of the Sparkfun-ZED-F9P-stupid-long-name above; look for the connections marked RX/TX; those are the receive/transmit pins respectively of the serial ports.  This is clearly explained in the [Sparkfun hookup guide](https://learn.sparkfun.com/tutorials/gps-rtk2-hookup-guide).  It also explains about antennas and ground plans and other setup stuff, including connecting to a corrections source, but we'll talk about that here as well.
 
-Our Donkeycar has a RaspberryPi (or a Jetson Nano) and that has Wi-Fi.  So if the car is close enough to a Wi-Fi hotspot then it can use an NTRIP client to read the RTCM3 corrections from the base station over the internet, then send the corrections to the gps receiver over a serial connection.  If the car is not consistently close enough to a Wi-Fi hotspot (which it probably won't be), then you could use cellular data; I taped my phone to my car and put it into hotspot mode, then connected the RaspberryPi Wi-Fi to the phone's hotspot so it could access the Internet while it was driving. 
+So receiving the corrections; our Donkeycar has a RaspberryPi (or a Jetson Nano) and that has Wi-Fi.  So if the car is close enough to a Wi-Fi hotspot then it can use an NTRIP client to read the RTCM3 corrections from the base station over the internet, then send the corrections to the gps receiver over a serial connection.  If the car is not consistently close enough to a Wi-Fi hotspot (which it probably won't be), then you could use cellular data; I taped my phone to my car and put it into hotspot mode, then connected the RaspberryPi Wi-Fi to the phone's hotspot so it could access the Internet while it was driving. 
 
 A RaspberryPi also has Bluetooth and so does our phone.  So another way to get corrections using your phone is to get an NTRIP client mobile app on the phone and use it to get the corrections from a base station, then transmit the corrections to the RaspberryPi using Bluetooth serial.  The RaspberryPi would then forward the corrections to the gps receiver over a serial connection.  
 
-But what if you have to use your own base station?  That might actually be the easiest scenario, but the most expensive.  You need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the gps receiver transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected t the gps receiver's serial port, so the corrections are received by the radio and input to the gps receiver via the serial port.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
+But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the base station transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected to the gps receiver's serial port on the car, so the corrections are received by the radio and input to the gps receiver via the serial port to which the radio is connected.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
 
 ### The cold hard facts
 Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.
@@ -98,6 +103,100 @@ RTKLIB is an open source software package written by Tomoji Takasu, that can use
 - http://www.rtklib.com/
 - [RTKLIB github](https://github.com/tomojitakasu/RTKLIB)
 - [RTKLIB Demo5; rtklibexplorer RTKLIB fork](https://github.com/rtklibexplorer/RTKLIB)
+
+#### Setup RTKLIB NTRIP client on RaspberryPi/Jetson Nano
+We can build RTKLIB on the nano and use it to request corrections over the internet and send them to a serial port.  We only need the str2str command line application, so we will only build that.  
+
+You must have the `GCC` compiler and the `make` build utility available.  These are pretty much always available on a Linux system.  However for MacOS you must install the XCode toolset; so first, open the Mac App Store and install Xcode for free. Then, open Xcode, go to Xcode menu (on the menu bar) > Preferences > Downloads, and install Command Line Tools. You will get commands like gcc, make, purge...  Windows is an inhospitable place for gcc, but you can give it a try.  Here is a way to install GCC; https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/  Another ways to try this on windows is to install Linux Subsystem For Linux from the Windows store; then you have a nice linux shell as part of Windows.  
+
+Once you have a working gcc and make, just clone the repo, checkout the 2.4.3 branch and build str2str.  The executable will end up in the gcc folder.
+
+```
+git clone https://github.com/tomojitakasu/RTKLIB.git --branch rtklib_2.4.3
+cd RTKLIB/app/consapp/str2str/gcc
+make
+```
+
+If you have the gps board connected to the computer then you can send the corrections via USB serial.  It is also possible to connect a serial port on the Sparkfun F9P SMA board directly to the serial port exposed on the RaspberryPi/Jetson gpio bus. In our final setup we will need to send corrections to one serial port and read NMEA sentences from another. The general format of the command to output RTCM3 a serial port is:
+```
+./str2str -in ntrip://USER:PASSWORD@CORS_IP:2101/MOUNT_POINT -b 1 -out serial://<device>:<baud>:8:n:1
+```
+
+RTKLIB manual is at http://www.rtklib.com/prog/manual_2.4.2.pdf  It has more details.
+
+Once you have build str2str, try to use it to get RTCM corrections from an NTRIP server and output them to the console to make sure you account credentials are working.  In this case it is using a UNAVCO server in Sonoma California:
+
+```
+./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3
+```
+
+If that works then your credentials and server address are correct.  
+
+See this JetsonHacks [video](https://jetsonhacks.com/2019/10/10/jetson-nano-uart/) for using the serial ports on the Jetson Nano GPIO header. To output to Jetson Nano's serial port you must have permissions to read/write the serial port.  Run this command to add your user to the dialout group.
+ ```
+ sudo usermod -aG dialout $(whoami)
+ ```
+
+The serial UART in the 40pin GPIO header is setup to allow login via serial by default.  If you intent to use that port for sending RTCM corrections to the gps board, you must stop that service before we can use the serial port for other purposes. 
+```
+systemctl stop nvgetty
+```
+
+To stop this from restarting on every boot, permanently disable after stopping you can do this.  Note that this kills the ability to `ssh` into the nano, so you may NOT want to make this permanent.
+
+```
+systemctl disable nvgetty
+udevadm trigger
+```
+
+Now you can run str2str and give it the serial port as an output destination.  The Sparkfun F9P breakout board's RTCM correction port (UART2) defaults to 38400bps.  We need to make the serial port on the Nano that we are transmitting from match that baud rate.
+```
+sudo stty -F /dev/ttyTHS1 38400
+```
+
+Make sure you are in the gcc folder where we built the str2str application.  Run the application and specify the ntrip server as the input and the serial port as the output.  This example reads the corrections from a UNAVCO NTRIP server and sends them to a serial port using the default baud rate for the F9P serial ports.
+```
+./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyTHS1:38400:8:n:1
+```
+
+As we will see later, it is possible to use U-Center to configure the F9P serial port to use a higher baud rate.  We will want to do that.  When we do that then we will also want the Nano's serial port to use that higher baud rate before connecting to str2str.  Here is a command to set the serial port to 115200 baud.  
+```
+sudo stty -F /dev/ttyTHS1 115200
+```
+
+Note that you do not have to do this for the USB serial port; it can autodetect the baud rate.  Just make sure the baud rate specified in the str2str command matches the baud rate of the F9P serial port.  For instance, if we set the F9P serial port to 230400 using U-Center and we want to send corrections to it from the computer's USB serial port:
+```
+./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyUSB0:230400:8:n:1
+```
+
+Note that you could _also_ output to a file to capture the data or to help in debugging.  str2str can write to to up to 4 -out destinations.
+```
+./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out ./rtcm.txt -out serial://ttyTHS1:38400:8:n:1 -p 38.23983 -122.45170 -25.074
+```
+
+Note the `-p` longitude latitude altitude arguments.  Normally a base station sends it's exact position as part of the RTCM stream.  Some servers might not OR you might be using your own server and need to specifiy it's exact location this way.
+
+The output of str2str looks like this when it first starts
+```
+$ ./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyTHS1:38400:8:n:1
+stream server start
+2022/05/06 22:53:40 [WC---]          0 B       0 bps (0) connecting... (1) /dev/ttyTHS1
+2022/05/06 22:53:45 [CC---]       1477 B    2518 bps (0) rtgpsout.unavco.org/P200_RTCM3 (1) /dev/ttyTHS1
+2022/05/06 22:53:50 [CC---]       3052 B    2514 bps (0) rtgpsout.unavco.org/P200_RTCM3 (1) /dev/ttyTHS1
+2022/05/06 22:53:55 [CC---]       4627 B    2517 bps (0) rtgpsout.unavco.org/P200_RTCM3 (1) /dev/ttyTHS1
+
+```
+These are not the corrections; they are logging statements emitted by the running application. The `[WC---]` box is for the status of connections.  The first letter is for connection (0), the input connection, subsequent letters for for up to 4 outputs.  
+- W = waiting for connection
+- C = connected
+- E = error
+
+For both the RaspberryPi and the Jetson Nano there are 3 pins that will want to connect to the F9P if we want to use the gpio serial port to send corrections from the computer to the gps board:
+- pin board 6 is ground
+- pin board 8 txd; tty transmit
+- pin board 10 is rxd; tty receive
+
+Note that we have NOT connect any positive voltage.  There is no need; the F9P board will be powered when it is connection to the USB port, so we do not need to power it through the serial pins.
 
 #### Lefebure NTRIP Client for Android
 Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth SPP connection to the gps receiver if the receiver has an attached bluetooth radio or to the RaspberryPi, which would then forward to the gps receiver via RTKLIB str2str.  
