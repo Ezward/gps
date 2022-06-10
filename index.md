@@ -206,7 +206,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
 - [Lefebure](http://lefebure.com/software/android-ntripclient/) 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lefebure.ntripclient)
 
-Sending Corrections from Android NTRIP Client 
+**Configure Android NTRIP Client** 
 
 - Install Lefebure NTRIP client for android from the android store or from http://lefebure.com/software/android-ntripclient/
 - Configure the NTRIP source on Lefebure NTRIP client
@@ -224,11 +224,11 @@ Sending Corrections from Android NTRIP Client
     - Leave the other fields to the defaults.
     
 
-##### ***Setup Raspberry Pi for serial over bluetooth (SPP)***
+**Pair the RaspberryPi and Android Phone over Bluetooth**
 
 The bluetooth pairing (steps 1, 2 and 3 below) needs to be done only once on the Raspberry Pi to set it up to connect to the Android Bluetooth.  The process was adapted from what I found in this video: https://www.youtube.com/watch?v=sY06F_sPef4
 
-1. Add the SP profile to the Pi; edit `/etc/systemd/system/dbus-org.bluez.service`.  In the editor, 
+1. Setup Raspberry Pi for serial over bluetooth (SPP).  Add the SP profile to the Pi; edit `/etc/systemd/system/dbus-org.bluez.service`.  In the editor, 
 add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a second line that starts the serial port (SP) service. NOTE: if you don't want the serial port service to start on every reboot, then leave this line out, in which case you will need start the serial port service manually before connecting the phone (see step 4 below).  When done editing; save the file.  The two lines in your `dbus-org.bluez.service` configuration should like this when you are done editing.   When satified reboot the RaspberryPi so this change takes affect.
     ```
     ExecStart=/usr/lib/bluetooth/bluetoothd -C
@@ -251,7 +251,8 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     - Run quit to exit the bluetoothctl shell.
     - You should now be back at the command prompt.
 
-4. Now that RPi and your phone are paired, connect the NTRIP app.
+**Send corrects from the Android NTRIP client to the RaspberryPi**
+1. Now that RPi and your phone are paired, connect the NTRIP app.
     - On the RaspberryPi, if you did not configure the serial port service to start on every reboot (see step 1 above), then start it now; 
         - Run `sudo sdptool add SP` at the command prompt.  You should get “Serial Port service registered”
     - Start the RaspberryPi listening for a connection on bluetooth serial so it will automatically connect when the Android phone is available.
@@ -264,7 +265,7 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     Connection from 00:3D:E8:89:EA:B6 to /dev/rfcomm0
     Press CTRL-C for hangup
     ```
-4. Now we can run RTKLIB str2str in a separate command console to route the incoming NTRIP to the F9P (in the case below, via the second hardware serial port that has been enabled on the GPIO bus).
+2. Now we can run RTKLIB str2str in a separate command console to route the incoming NTRIP to the F9P (in the case below, via the second hardware serial port that has been enabled on the GPIO bus).
     ```
     ./str2str -in serial://rfcomm0:115200:8:n:1 -out ./rtcm.txt -out serial://ttyAMA1:115200:8:n:1
     ```
