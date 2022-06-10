@@ -24,7 +24,14 @@ Next, let's talk about the kinds of gps devices available for talking to the sat
   <p align="center"><a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a></p>
 </p>
 
-U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
+Other companies produce ZED-F9P based boards.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the antenna and costs a little less than the SparkFun board without the antenna.
+
+<p align="center">
+  <img src="https://www.mouser.com/images/ardusimple/hd/AS-STARTKIT-BASIC-L1L2-NH-02_SPL.jpg" style="height: 50%; width: 50%;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
+  <p align="center"><a href="https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a></p>
+</p>
+
+What is it with these product names?  Anyway, U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
 
 U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a piece of software called [U-Center](https://www.u-blox.com/en/product/u-center) that can be used to configure and operate U-Blox based devices.  It allows you to optimize the way the chipset works for how you want to use it, within limits.  U-Center is written for Microsoft Windows, but it can be run on Macintosh or Linux using the Wine emulation system.  I've successfully done this on Macintosh.  I'll add a section near the end that describes how to use U-Center and how to set it up on Macintosh.
 
@@ -96,8 +103,14 @@ A RaspberryPi also has Bluetooth and so does our phone.  So another way to get c
 But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the base station transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected to the gps receiver's serial port on the car, so the corrections are received by the radio and input to the gps receiver via the serial port to which the radio is connected.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
 
 ### The cold hard facts
-Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.
+Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.  First a pretty picture to set the mood.
 
+<p align="center">
+  <img src="img/donkeycar_gps.jpg" style="height: 75%; width: 75%;" alt="DonkeyCar with Sparkfun RTK GPS" />
+  <p align="center">DonkeyCar with Sparkfun RTK GPS</p>
+</p>
+
+So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi connected to a Sparkfun ZED-F9P RTK GPS board via USB and GPIO serial.  In this case it is using an extra hardware backed UART (uart3) mapped to pins on the gpio bus.  This was required for reasons explained later.  So in this setup we want to get corrections into the RaspberryPi, either using RTKLIB or via an Android NTRIP client, and then send them via a serial port to the ZED-F9P. The following sections describe how to setup the software to do that.
 
 #### RTKLIB
 RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
@@ -119,7 +132,7 @@ cd RTKLIB/app/consapp/str2str/gcc
 make
 ```
 
-If you have the gps board connected to the computer then you can send the corrections via USB serial.  It is also possible to connect a serial port on the Sparkfun F9P SMA board directly to the serial port exposed on the RaspberryPi/Jetson gpio bus. In our final setup we will need to send corrections to one serial port and read NMEA sentences from another. The general format of the command to output RTCM3 a serial port is:
+If you have the gps board connected to the computer then you can send the corrections via USB serial.  It is also possible to connect a serial port on the Sparkfun F9P SMA board directly to the serial port exposed on the RaspberryPi/Jetson gpio bus. In our final setup we will need to send corrections to one serial port and read NMEA sentences from another, so we will need both the USB and the gpio serial ports. The general format of the command to output RTCM3 a serial port is:
 ```
 ./str2str -in ntrip://USER:PASSWORD@CORS_IP:2101/MOUNT_POINT -b 1 -out serial://<device>:<baud>:8:n:1
 ```
