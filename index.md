@@ -349,7 +349,7 @@ However, if I am in a place where I want to use an NTRIP server, but I don't hav
 - Use an Android NTRIP client on my phone. pair my phone with the RaspberryPi or Jetson Nano via Bluetooth.  The Android NTRIP client receive the corrections over the mobile internet and then sends the corrections to the RPi/Nano over bluetooth serial.  Then we can forward the corrections, using str2str running on the RPi/Nano, over the USB serial to the ZED-F9P.  The RPi/Nano can read NMEA using the GPIO serial connected to the ZED-F9P corrections port.
 - We could get real hacky and tape our phone to the Donkeycar (or maybe put it in an pouch or envelope and tape that to the car; that might be better for your phone).  Turn on the phone's mobile hotspot (a word to the wise; do that before you tape it to the car), have the RPi/Nano connect to it via Wi-Fi, then stream corrections from you favorite NTRIP server via the mobile internet.  Beyond the hotspot setup all the software setup and hardware connections are the same as if streaming directly over fixed Wi-Fi.
 
-##### Where art thine UART oh RPi? 
+### Where art thine UART oh RPi? 
 As previously discussed ad nauseum, I have found that UART on the GPIO bus (gpio 14&15 exposed on board pins 8&10 respectively) to be unreliable; it is not based on a hardware UART and so is more prone to issues at higher speeds.  That bugged me, so even though I found a work around, I wanted to fix it.  I have not found a fix on the Jetson Nano, but it can be fixed on the RaspberryPi 4 (but not 3 or below; sorry).  By default the RPi uses two UARTs; one for the bluetooth functionality and one for the GPIO serial port.  The Bluetooth UART uses underlying hardware and so can handle very high baud rates with hardware handshaking.  The UART exposed on the GPIO bus is less capable.  Luckily the RPi 4 actually has 6 hardware-based UARTS. We can expose these by using device-tree overlays.  The device tree is data that is loaded at boot time that tells Linux which devices are attached and so which drivers to load.  A device tree overlay (dtoverlay) is a way of adding to the device tree without having to create a whole new one.  RaspberryPi OS has a bunch of available dtoverlays that can be used to turn on optional features.  We can list the ones that have to do with UARTs (see this RPi [forum](https://forums.raspberrypi.com/viewtopic.php?t=244827) discussion)
 
 ```
@@ -397,6 +397,3 @@ ArduSimple makes gps boards and has excellent content.
 
 Sparkfun makes lots of great stuff, including gps boards.  They are known for their excellent content explaining how to use their products.
 - https://learn.sparkfun.com/tutorials/what-is-gps-rtk
-
-
-
