@@ -384,7 +384,7 @@ USB            <--->  USB
 
 <p align="center">
   <img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/5/9/5/GPIO.png" alt="RaspberryPi GPIO" />
-  <p align="center">RaspberryPi GPIO</p>
+  <p align="center"><a href="https://learn.sparkfun.com/tutorials/introduction-to-the-raspberry-pi-gpio-and-physical-computing/gpio-pins-overview">RaspberryPi GPIO</a></p>
 </p>
 
 
