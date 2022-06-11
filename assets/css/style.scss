@@ -8,14 +8,19 @@ nav {
 nav ul {
   margin: 0;
   list-style-type: square;
-  padding-top: 1em;
   padding-inline-start: 2ch;
 }
 nav > ul {
   list-style-type: none;
-  padding-top: 0;
   padding-inline-start: 0; /* no padding in outermost list */
 }
+nav > ul > li {
+  padding-top: 0;  /* no padding at top of TOC */
+}
+nav > ul > li {
+  padding-top: 0.5em; /* padding before each top level item */
+}
+nav > ul
 a:hover, a:focus {
   color: blue;
   font-weight: inherit;
