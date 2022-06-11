@@ -61,7 +61,7 @@ Here are 1000 readings taken with an U-Blox NEO M8N with an active GPS/GNSS ante
   <p align="center">U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
 </p>
 
-The points are within A 2.5 meter range in each direction.  So that is better than the first figure, which was done with a non-active antenna and no base plane.
+The points are within A 5 meter range in each direction.  So that is better than the first figure, which was done with a non-active antenna and no base plane.
 
 Next, this is 1000 readings with a U-Blox ZED F9P, an active GPS/GNSS antenna and a good ground plane mounted on a tripod, the same setup as the last set of readings.  
 <p align="center">
@@ -69,7 +69,7 @@ Next, this is 1000 readings with a U-Blox ZED F9P, an active GPS/GNSS antenna an
   <p align="center">U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
 </p>
 
-The points are within 2.5 meter range vertically and 1.25 meters horizontally.  So that is a little better than the NEO-N8M.  This shows the series 9 chipset is superior to the series 8.  But still, this is not accurate enough for navigating a short RC course where the lane may be less than 2 meters wide.  Also, we can't take 100 or 1000 readings at each position in order to get an average; we are racing!  We need multiple readings per second so we can see where the car is as it moves.  Crap, we are our of luck I guess.  But wait, there is more!
+The points are within 2.5 meter range vertically and 1.25 meters horizontally.  So that is a even better than the NEO-N8M.  This shows the series 9 chipset is superior to the series 8.  But still, this is not accurate enough for navigating a short RC course where the lane may be less than 2 meters wide.  Also, we can't take 100 or 1000 readings at each position in order to get an average; we are racing!  We need multiple readings per second so we can see where the car is as it moves.  Crap, we are our of luck I guess.  But wait, there is more!
 
 ### Kinematifanatics
 What if you could make readings that were more like 2 centimeters CEP?  What if you could do that 10 times per second while you were moving?  What if it was cheap as hell?  Well, forget that last one, but the other two are possible by using RTK gps.  [Sparkfun](https://learn.sparkfun.com/tutorials/what-is-gps-rtk/all) describes RTK gps, "RTK is short for real time kinematics. A GPS receiver capable of RTK takes in the normal signals from the Global Navigation Satellite Systems. On top of these signals an RTK receiver takes in an RTCM correction stream and then calculates your location with 1cm accuracy in real time."
@@ -264,7 +264,7 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     - Run quit to exit the bluetoothctl shell.
     - You should now be back at the command prompt.
 
-**Send corrects from the Android NTRIP client to the RaspberryPi**
+**Send corrections from the Android NTRIP client to the RaspberryPi**
 1. Now that RPi and your phone are paired, connect the NTRIP app.
     - On the RaspberryPi, if you did not configure the serial port service to start on every reboot (see step 1 above), then start it now; 
         - Run `sudo sdptool add SP` at the command prompt.  You should get “Serial Port service registered”
@@ -278,6 +278,7 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     Connection from 00:3D:E8:89:EA:B6 to /dev/rfcomm0
     Press CTRL-C for hangup
     ```
+   
 2. Now we can run RTKLIB str2str in a separate command console to route the incoming NTRIP to the F9P (in the case below, via the second hardware serial port that has been enabled on the GPIO bus).
     ```
     ./str2str -in serial://rfcomm0:115200:8:n:1 -out ./rtcm.txt -out serial://ttyAMA1:115200:8:n:1
