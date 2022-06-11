@@ -264,7 +264,7 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     - Run quit to exit the bluetoothctl shell.
     - You should now be back at the command prompt.
 
-**Send corrections from the Android NTRIP client to the RaspberryPi**
+#### Send corrections from the Android NTRIP client to the RaspberryPi
 1. Now that RPi and your phone are paired, connect the NTRIP app.
     - On the RaspberryPi, if you did not configure the serial port service to start on every reboot (see step 1 above), then start it now; 
         - Run `sudo sdptool add SP` at the command prompt.  You should get “Serial Port service registered”
@@ -288,6 +288,98 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
 
 <p align="center">
   <img src="img/one_does_not_simply_stream.jpg" style="height: 75%; width: 75%;" alt="One does not simply stream RTCM3 to GPIO serial." />
+</p>
+
+The plan at the start was to stream the RTCM3 corrections from the RaspberryPi or Jetson Nano's default GPIO serial port to the ZED-F9P's corrections port (F9P UART2).  So the first thing that was needed was to solder the headers to the F9P so we can make physical connections using dupont jumper wires.  I'm not going to go into that; there are a lot of videos on YouTube on how to solder headers and what you need to do it.  My only suggestion is to practice a LOT before you try to solder headers to your $300 gps board.  And have some flux ready.
+
+Once that is done the wiring was connected from the computer's default GPIO serial port on board pins 8&10 to the corrections serial port on the F9P.  By default the ZED-F9P corrections port is configured to read RTCM3.  The reason I started this way was because 'default' is a good word.  Look at all those defaults.  Nice. Or so I thought.
+
+Wiring Connections
+- F9P-UART2 is the corrections port on the Sparkfun GPS-RTK-SMA Breakout ZED-F9P
+  - This port is setup to input UBX, NMEA and RCTM3
+  - This port is setup to output RCTM3
+- F9P-USB port
+  - This port is setup to input and output UBX, NMEA and RTCM3
+
+GPIO on the 40 GPIO bus on the SBC (RaspberryPi or Jetson Nano)
+- Board pin 6 is GND
+- Board pin 8 is TX for uart2
+  - On the Jetson Nano the default spio serial port is `/dev/ttyTHS1`.
+  - On the RaspberryPi 4 the default gpio serial port is  `/dev/ttyAMA1`.
+- Board pin 10 is RX for uart2
+
+```
+RPi/Nano            ZED-FP9   
+-----------------------------
+Pin-6        <--->  GND
+Pin-8, TXD   <--->  UART2-RX
+Pin-10, RXD  <--->  UART2-TX
+USB          <--->  USB
+```
+
+Software setup (TLDR version)
+Use u-center to set the FP9 UART-2 to 115200 baud
+Set the RPi/Jetson Nano serial port to 115200 baud
+`sudo stty -F /dev/ttyTHS1 115200`
+Run str2str on the RPi to get corrections from UNAVCO or your NTRIP server and send them from the default gpio serial port to to the FP9 corrections port.
+`./str2str -in ntrip://USERNAME:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyTHS1:115200:8:n:1`
+Read NMEA messages on USB serial port, /dev/ttyACM0
+
+The bad news is that with this setup I never get to float mode on the ZED-F9P using either the RaspberryPi or the Jetson Nano; the `RTK` LED on the Sparkfun ZED-F9P stayed solidly lit.  Let me explain (isn't that what this whole article is for?); the ZED-F9P goes through stages as it develops a more accurate position estimate.  This is indicated by an LED on the Sparkfun ZED-F9P board labeled `RTK`.  When it is solid it is not using any corrections and so the position estimate is at its least accurate.  When it starts using corrections, but before most of its satellites are corrected, it is in 'float' mode.  In this mode the `RTK` LED blinks.  Float mode is more accurate, but more importantly it indicates that RTCM3 corrections data is getting to the ZED-F9P.  If you have a good view of the sky and you never get to float mode it probably means the RTCM3 corrections are not getting to the gps board correctly.  Of course if you are in your basement then it doesn't matter if the corrections make it to the board; you can't see any satellites!  If you get to float mode then the next stage you are hoping for is 'fixed' mode.  In this mode the F9P can apply corrections to most of the satellites it can see and so its position estimate is optimal.  In 'fixed' mode the `RTK` LED goes off.
+
+So the bad news is that sending RTCM3 corrections from the RPi or Nano using the default gpio serial port does not seem to work.  But there is some good news.  I got to 'fixed' on the Jetson Nano by streaming RTCM3 to the USB serial port and reading the NMEA from UART2.  Even better news, In 100 samples I got a range of 2.5 cm.  Notice the 'c' before that 'm'.  If it ain't broken, it's fixed and fixed is good.
+
+This is what worked (note that I have increase the baud rate of the ZED-F9P corrections port to 115200 baud using U-Center, more on that later);
+```
+./str2str -in ntrip://USERNAME:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyACM0:115200:8:n:1
+```
+- Then read NMEA messages from `/dev/ttyTHS1` (or `/dev/ttyAMA0` on the RPi)
+- On the Jetson Nano, remember to stop the `nvgetty` login service does it does interfere with the serial port.
+
+So this is good if I am reading corrections over the internet; I can read them from the internet and send them to the ZED-F9P via USB serial, then I can read the super awesome accurate NMEA sentences using the gpio serial port.  However, in the field (like at a race track) I will not always be getting RTCM3 corrections over the internet; I might not have fixed internet.  I may have access to a local base station which means I will need a radio, like a LoRa radio, attached to a ZED-F9P serial port to receive corrections from the local base station.  It is common to connect the radio directly to the corrections serial port on the ZED-F9P, in which case I would not even need to send corrections from the Jetson Nano; I would get them directly from the radio.  That would allow me to read NMEA via USB.
+
+However, if I am in a place where I want to use an NTRIP server, but I don't have good fixed internet, then I will need another option.  There are a few I could use;
+Use an Android NTRIP client on my phone. pair my phone with the RaspberryPi or Jetson Nano via Bluetooth.  The Android NTRIP client receive the corrections over the mobile internet and then sends the corrections to the RPi/Nano over bluetooth serial.  Then we can forward the corrections, using str2str running on the RPi/Nano, over the USB serial to the ZED-F9P.  The RPi/Nano can read NMEA using the GPIO serial connected to the ZED-F9P corrections port.
+We could get real hacky and tape our phone to the Donkeycar.  Turn on the phone's mobile hotspot, have the RPi/Nano connect to it via Wi-Fi, then stream corrections for you favorite NTRIP server via the mobile internet.  Beyond the hotspot setup all the software setup and hardware connections are the same as if streaming directly over fixed Wi-Fi..
+
+##### Where art UART oh RPi? 
+I have found that UART on the GPIO bus (gpio 14&15 exposed on board pins 8&10 respectively) to be unreliable; it is not based on a hardware UART and so is more prone to issues at higher speeds.  By default the RPi uses two UARTs; one for the bluetooth functionality and one for the GPIO serial port.  The BT uart uses underlying hardware and so can handle very high baud rates.  The UART exposed on the GPIO bus is less capable.  Luckily the RPi 4 actually has 6 hardware-based UARTS. We can expose these by using device-tree overlays.  The device tree is data that is loaded at boot time that tells Linux which devices are attached and so which drivers to load.  A device tree overlay (dtoverlay) is a way of adding to the device tree without having to create a whole new one.  RasberryPi OS has a bunch of available dtoverlays that can be used to turn on optional features.  We can list the ones that have to do with UARTs (see this RPi forum discussion)
+
+$ dtoverlay -a | grep uart
+  midi-uart0
+  midi-uart1
+  miniuart-bt
+  uart0
+  uart1
+  uart2
+  uart3
+  uart4
+  uart5
+
+
+
+Add this in the /boot/config.txt in the [pi4] section (you will need to sudo) to enable uart3 using defaults, then reboot.
+
+# Enable UART3 on gpio 4=tx & 5=rx, no flow control pins
+dtoverlay=uart3
+
+
+Once that is done, then the serial device /dev/ttyAMA1 can be used to control the UART exposed on gpio 4&5, which are exposed on the 40 pin bus on board pin 7 and board pin 29 respectively.
+
+Connections when using the RaspberryPi UART3
+
+```
+RPi            <--->  FP9   
+--------------       ----------
+Pin-9  (GND)   <--->  GND
+Pin-7  (GPIO4) <--->  UART2-RX
+Pin-29 (GPIO5) <--->  UART2-TX
+USB            <--->  USB
+```
+
+<p align="center">
+  <img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/5/9/5/GPIO.png" style="height: 75%; width: 75%;" alt="RaspberryPi GPIO" />
+  <p align="center">RaspberryPi GPIO</p>
 </p>
 
 
