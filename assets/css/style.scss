@@ -5,9 +5,12 @@
 nav {
   padding: 0;
 }
-
 nav ul {
   margin: 0;
   list-style-type: none;
   padding-inline-start: 2ch;
 }
+nav + ul {
+  padding-inline-start: 0;
+}
+
