@@ -23,7 +23,9 @@
 
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
-        {% include toc.html html=content %}
+        <nav>
+          {% include toc.html html=content %}
+        </nav>
         <p/><p/>
 
         {% if site.github.is_project_page %}
