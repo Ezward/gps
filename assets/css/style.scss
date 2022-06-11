@@ -12,6 +12,7 @@ nav ul {
 }
 nav > ul {
   list-style-type: none;
+  padding-top: 1em;
   padding-inline-start: 0; /* no padding in outermost list */
 }
 a:hover, a:focus {
