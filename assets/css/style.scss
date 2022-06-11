@@ -17,10 +17,9 @@ nav > ul {
 nav > ul > li {
   padding-top: 0;  /* no padding at top of TOC */
 }
-nav > ul > li {
+nav > ul li {
   padding-top: 0.5em; /* padding before each top level item */
 }
-nav > ul
 a:hover, a:focus {
   color: blue;
   font-weight: inherit;
