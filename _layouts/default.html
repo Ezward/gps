@@ -24,7 +24,7 @@
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
         <nav>
-          {% include toc.html html=content %}
+          {% include toc.html html=content h_max=3 %}
         </nav>
         <p/><p/>
 
