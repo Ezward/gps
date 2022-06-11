@@ -102,7 +102,7 @@ A RaspberryPi also has Bluetooth and so does our phone.  So another way to get c
 
 But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the base station transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected to the gps receiver's serial port on the car, so the corrections are received by the radio and input to the gps receiver via the serial port to which the radio is connected.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
 
-### The cold hard facts
+## The cold hard facts
 Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.  First a pretty picture to set the mood.
 
 <p align="center">
@@ -112,7 +112,7 @@ Ok, this is the section (maybe sections) where I'll give detailed instructions o
 
 So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi connected to a Sparkfun ZED-F9P RTK GPS board via USB and GPIO serial.  In this case it is using an extra hardware backed UART (uart3) mapped to pins on the gpio bus.  This was required for reasons explained later.  So in this setup we want to get corrections into the RaspberryPi, either using RTKLIB or via an Android NTRIP client, and then send them via a serial port to the ZED-F9P. The following sections describe how to setup the software to do that.
 
-#### RTKLIB
+### RTKLIB
 RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
 
 - http://www.rtklib.com/
@@ -213,13 +213,13 @@ For both the RaspberryPi and the Jetson Nano there are 3 pins that will want to 
 
 Note that we have NOT connect any positive voltage.  There is no need; the F9P board will be powered when it is connection to the USB port, so we do not need to power it through the serial pins.
 
-#### Lefebure NTRIP Client for Android
+### Lefebure NTRIP Client for Android
 Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth SPP connection to the gps receiver if the receiver has an attached bluetooth radio or to the RaspberryPi, which would then forward to the gps receiver via RTKLIB str2str.  
 
 - [Lefebure](http://lefebure.com/software/android-ntripclient/) 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lefebure.ntripclient)
 
-**Configure Android NTRIP Client** 
+#### Configure Android NTRIP Client
 
 - Install Lefebure NTRIP client for android from the android store or from http://lefebure.com/software/android-ntripclient/
 - Configure the NTRIP source on Lefebure NTRIP client
@@ -237,7 +237,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
     - Leave the other fields to the defaults.
     
 
-**Pair the RaspberryPi and Android Phone over Bluetooth**
+#### Pair the RaspberryPi and Android Phone over Bluetooth
 
 The bluetooth pairing (steps 1, 2 and 3 below) needs to be done only once on the Raspberry Pi to set it up to connect to the Android Bluetooth.  The process was adapted from what I found in this video: https://www.youtube.com/watch?v=sY06F_sPef4
 
@@ -284,14 +284,14 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     ./str2str -in serial://rfcomm0:115200:8:n:1 -out ./rtcm.txt -out serial://ttyAMA1:115200:8:n:1
     ```
 
-### The Hardware: An Unexpected Journey
+## The Hardware: An Unexpected Journey
 
 <p align="center">
   <img src="img/one_does_not_simply_stream.jpg" style="height: 75%; width: 75%;" alt="One does not simply stream RTCM3 to GPIO serial." />
 </p>
 
 
-### Thanks, but where is the real info?
+## Thanks, but where is the real info?
 ArduSimple makes gps boards and has excellent content.  
 - https://www.ardusimple.com/rtk-explained/
 
