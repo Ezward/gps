@@ -8,11 +8,12 @@ nav {
 nav ul {
   margin: 0;
   list-style-type: square;
+  padding-top: 1em;
   padding-inline-start: 2ch;
 }
 nav > ul {
   list-style-type: none;
-  padding-top: 1em;
+  padding-top: 0;
   padding-inline-start: 0; /* no padding in outermost list */
 }
 a:hover, a:focus {
