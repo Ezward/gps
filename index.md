@@ -1,4 +1,4 @@
-## Setting up RTK GPS on a Raspberry Pi
+## Donkeycar meets RTK GPS
 
 ***In process: this content is being created.  It is not yet complete and it has not yet been tested as written.  If you see anything wrong or have a better/another way to do this please open an issue in the github repo.  Thanks.***
 
@@ -102,7 +102,7 @@ A RaspberryPi also has Bluetooth and so does our phone.  So another way to get c
 
 But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the base station transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected to the gps receiver's serial port on the car, so the corrections are received by the radio and input to the gps receiver via the serial port to which the radio is connected.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
 
-## The cold hard facts
+## The Secret Software Sauce
 Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.  First a pretty picture to set the mood.
 
 <p align="center">
@@ -119,7 +119,7 @@ RTKLIB is an open source software package written by Tomoji Takasu, that can use
 - [RTKLIB github](https://github.com/tomojitakasu/RTKLIB)
 - [RTKLIB Demo5; rtklibexplorer RTKLIB fork](https://github.com/rtklibexplorer/RTKLIB)
 
-#### Setup RTKLIB NTRIP client on RaspberryPi/Jetson Nano
+#### Compile RTKLIB on RaspberryPi/Jetson Nano
 We can build RTKLIB on the nano and use it to request corrections over the internet and send them to a serial port.  We only need the str2str command line application, so we will only build that.  
 
 You must have the `GCC` compiler and the `make` build utility available.  These are pretty much always available on a Linux system.  However for MacOS you must install the XCode toolset; so first, open the Mac App Store and install Xcode for free. Then, open Xcode, go to Xcode menu (on the menu bar) > Preferences > Downloads, and install Command Line Tools. You will get commands like gcc, make, purge...  Windows is an inhospitable place for gcc, but you can give it a try.  Here is a way to install GCC; https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/  Another ways to try this on windows is to install Linux Subsystem For Linux from the Windows store; then you have a nice linux shell as part of Windows.  
@@ -139,6 +139,7 @@ If you have the gps board connected to the computer then you can send the correc
 
 RTKLIB manual is at http://www.rtklib.com/prog/manual_2.4.2.pdf  It has more details.
 
+#### Connect to an NTRIP server
 Once you have build str2str, try to use it to get RTCM corrections from an NTRIP server and output them to the console to make sure you account credentials are working.  In this case it is using a UNAVCO server in Sonoma California:
 
 ```
@@ -237,7 +238,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
     - Leave the other fields to the defaults.
     
 
-#### Pair the RaspberryPi and Android Phone over Bluetooth
+#### Pair RPi/Nano and Phone over Bluetooth
 
 The bluetooth pairing (steps 1, 2 and 3 below) needs to be done only once on the Raspberry Pi to set it up to connect to the Android Bluetooth.  The process was adapted from what I found in this video: https://www.youtube.com/watch?v=sY06F_sPef4
 
@@ -264,7 +265,9 @@ add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a seco
     - Run quit to exit the bluetoothctl shell.
     - You should now be back at the command prompt.
 
-#### Send corrections from the Android NTRIP client to the RaspberryPi
+#### Send corrections from phone to RPi/Nano
+Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson Nano.
+
 1. Now that RPi and your phone are paired, connect the NTRIP app.
     - On the RaspberryPi, if you did not configure the serial port service to start on every reboot (see step 1 above), then start it now; 
         - Run `sudo sdptool add SP` at the command prompt.  You should get “Serial Port service registered”
