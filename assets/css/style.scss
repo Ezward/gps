@@ -15,9 +15,6 @@ nav > ul {
   padding-inline-start: 0; /* no padding in outermost list */
 }
 nav > ul > li {
-  padding-top: 0;  /* no padding at top of TOC */
-}
-nav > ul li {
   padding-top: 0.5em; /* padding before each top level item */
 }
 a:hover, a:focus {
