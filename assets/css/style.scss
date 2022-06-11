@@ -10,7 +10,7 @@ nav ul {
   list-style-type: none;
   padding-inline-start: 2ch;
 }
-nav + ul {
+nav > ul {
   padding-inline-start: 0;
 }
 
