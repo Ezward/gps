@@ -3,9 +3,9 @@
 
 @import "{{ site.theme }}";
 
-h4  {
- font-size:inherit;
- font-weight:500;
- text-transform:none;
- letter-spacing:0.1em
-}
+h4
+  font-size:inherit;
+  font-weight:500;
+  text-transform:none;
+  letter-spacing:0.1em;
+
