@@ -13,4 +13,7 @@ nav ul {
 nav > ul {
   padding-inline-start: 0;
 }
-
+a:hover, a:focus {
+  color: #069;
+  font-weight: inherit;
+}
