@@ -11,7 +11,13 @@ nav ul {
   padding-inline-start: 2ch;
 }
 nav > ul {
-  padding-inline-start: 0;
+  padding-inline-start: 0; /* no padding in outermost list */
+}
+nav li::before {
+  content: "•"; /* Insert content that looks like bullets */
+}
+nav > ul > li::before {
+  content: ""; /* no bullet in outermost list */
 }
 a:hover, a:focus {
   color: blue;
