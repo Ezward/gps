@@ -2,7 +2,9 @@ title: Ezward on GPS
 description: Stuff I've learned about using GPS
 
 # theme: jekyll-theme-slate
-remote_theme: pmarsceill/just-the-docs # Borrowing the theme from https://github.com/pmarsceill/just-the-docs
+#remote_theme: pmarsceill/just-the-docs # Borrowing the theme from https://github.com/pmarsceill/just-the-docs
+remote_theme: pages-themes/minimal@v0.2.0
+
 github_repo_url: "https://ezward.github.io/gps/"
 
 # Heading anchor links appear on hover over h1-h6 tags in page content
