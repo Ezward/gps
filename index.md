@@ -33,7 +33,7 @@ Other companies produce ZED-F9P based boards.  ArduSimple makes a number of diff
 
 What is it with these product names?  Anyway, U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
 
-U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a piece of software called [U-Center](https://www.u-blox.com/en/product/u-center) that can be used to configure and operate U-Blox based devices.  It allows you to optimize the way the chipset works for how you want to use it, within limits.  U-Center is written for Microsoft Windows, but it can be run on Macintosh or Linux using the Wine emulation system.  I've successfully done this on Macintosh.  I'll add a section near the end that describes how to use U-Center and how to set it up on Macintosh.
+U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a piece of software called [U-Center](https://www.u-blox.com/en/product/u-center) that can be used to configure and operate U-Blox based devices.  It allows you to optimize the way the chipset works for how you want to use it, within limits.  U-Center is written for Microsoft Windows, but it can be run on Macintosh or Linux using the Wine emulation system.  I've successfully done this on Macintosh by following this [ArduSimple forum](https://www.ardusimple.com/question/running-u-center-on-mac-osx-wine/) post.  SparkFun has a good [introduction to U-Center](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all).
 
 <p align="center">
   <img src="img/u-center.png" style="height: 75%; width: 75%;" alt="U-Center" />
@@ -388,7 +388,7 @@ USB            <--->  USB
 </p>
 
 
-## Thanks, but where is the real info?
+## Thanks, but is there someone around here that knows anything?
 ArduSimple makes gps boards and has excellent content.  
 - https://www.ardusimple.com/rtk-explained/
 
