@@ -14,13 +14,6 @@ nav > ul {
   list-style-type: none;
   padding-inline-start: 0; /* no padding in outermost list */
 }
-nav li::before {
-  content: "-"; /* Insert content that looks like bullets */
-}
-nav > ul > li::before {
-  content: ""; /* no bullet in outermost list */
-  padding-right: 1ch;
-}
 a:hover, a:focus {
   color: blue;
   font-weight: inherit;
