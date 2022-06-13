@@ -123,6 +123,7 @@ You will want to do 4 things with U-Center to get your gps module setup.
   - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
   - Open the 'Configuration' view and choose the 'PRT' port configuration.
   - Update uart1 and uart2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
+    - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 3. You will want to increase the rate at which the ZED-9FP outputs it's position estimates.  By default it only outputs one per second.  We want to increase that to 5 per second.
