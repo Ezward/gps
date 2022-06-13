@@ -115,8 +115,10 @@ So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi con
 ### U-Center
 You will want to do 4 things with U-Center to get your gps module setup.  
 
-1. On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
-  - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
+1. Install U-Center
+  - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
+  - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
+    - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
 
 2.  You will want to increase the default baud rate on the serial ports.  
   - Attach your GPS to a USB-UART adapter and connect it to your computer.
@@ -137,7 +139,6 @@ You will want to do 4 things with U-Center to get your gps module setup.
   - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
   - Select `Save` button to save to the gps module's live settings.
   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
-
 
 ### RTKLIB
 RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
