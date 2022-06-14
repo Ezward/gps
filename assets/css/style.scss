@@ -2,6 +2,9 @@
 ---
 
 @import "{{ site.theme }}";
+ol, ul {
+    padding-left: 1em;
+}
 nav {
   padding: 0;
 }
