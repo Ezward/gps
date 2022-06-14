@@ -116,29 +116,29 @@ So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi con
 You will want to do 4 things with U-Center to get your gps module setup.  
 
 1. Install U-Center
-- Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
-- On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
-    - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
+   - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
+   - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
+       - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
 
-2.  You will want to increase the default baud rate on the serial ports.  
-- Attach your GPS to a USB-UART adapter and connect it to your computer.
-- Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
-- Open the 'Configuration' view and choose the 'PRT' port configuration.
-- Update uart1 and uart2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
-    - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
-- Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+2. You will want to increase the default baud rate on the serial ports.  
+   - Attach your GPS to a USB-UART adapter and connect it to your computer.
+   - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
+   - Open the 'Configuration' view and choose the 'PRT' port configuration.
+   - Update uart1 and uart2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
+       - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
+   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 3. You will want to increase the rate at which the ZED-9FP outputs it's position estimates.  By default it only outputs one per second.  We want to increase that to 5 per second.
-- In u-center, open `Messages` view and choose the `UBX` configuration, then `CFG (config)`, then `RATE (rates)`
-- Set the `Measurement Period` to 200ms to get a 5 hz update rate.
-- Select `Save` button to save to the gps module's live settings.
-- Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+   - In u-center, open `Messages` view and choose the `UBX` configuration, then `CFG (config)`, then `RATE (rates)`
+   - Set the `Measurement Period` to 200ms to get a 5 hz update rate.
+   - Select `Save` button to save to the gps module's live settings.
+   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 4. If you are using RTK gps, you will also want to increase the resolution of the position values in the NMEA messages.  RTK outputs a higher resolution position than standard NMEA can handle (it doesn't provide enough decimal places in the position values), we we want to change that.
-- In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
-- In the `Mode Flags` section, check the `High Precision Mode` checkbox.
-- Select `Save` button to save to the gps module's live settings.
-- Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+   - In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
+   - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
+   - Select `Save` button to save to the gps module's live settings.
+   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 ### RTKLIB
 RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
