@@ -8,10 +8,6 @@ ol, ul {
 ul {
   list-style-type: square;
 }
-pre {
-  padding-left: 0;
-  padding-right: 0;
-}
 nav {
   padding: 0;
 }
@@ -30,4 +26,9 @@ nav > ul > li {
 a:hover, a:focus {
   color: blue;
   font-weight: inherit;
+}
+/* make code blocks more compact */
+.highlight {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
 }
