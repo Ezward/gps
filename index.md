@@ -121,16 +121,17 @@ You will want to do 4 things with U-Center to get your gps module setup.
        - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
 
 2. You will want to increase the default baud rate on the serial ports.  
-   - Attach your GPS to a USB-UART adapter and connect it to your computer.
+   - Connect your gps receiver to your computer that is running U-Center with a USB cable.
+       - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from you computer to the UART pins on your gps receiver.
    - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
-   - Open the 'Configuration' view and choose the 'PRT' port configuration.
-   - Update uart1 and uart2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
+   - Open the `View` menu, then the `Configuration` view and choose the `PRT (ports)` port configuration.
+   - Update UART1 and UART2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
        - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
-3. You will want to increase the rate at which the ZED-9FP outputs it's position estimates.  By default it only outputs one per second.  We want to increase that to 5 per second.
-   - In u-center, open `Messages` view and choose the `UBX` configuration, then `CFG (config)`, then `RATE (rates)`
-   - Set the `Measurement Period` to 200ms to get a 5 hz update rate.
+3. You will want to increase the rate at which the gps receiver outputs position estimates.  By default, most gps receivers only output one per second.  That is a little slow for racing, so we want faster position updates.  The [ZED-F9P Data Sheet](https://content.u-blox.com/sites/default/files/ZED-F9P-04B_DataSheet_UBX-21044850.pdf) indicates that the max rate is 7hz when using 4 satellite systems, 10hz when using 3 satellite systems and 15hz when using two satellite systems.  More simultaneous satellite systems is more accurate, but slower.  We will take the compromise of 10hz.  Note that the NEO-8 is limited to an update rate of 5hz in order to maintain contact with two satellite system. 
+   - In u-center, open `View` then `Configuration` view and then `RATE (rates)`
+   - Set the `Measurement Period` to 100ms to get a 10 hz update rate (NEO-8 owners should use 200ms for 5hz).
    - Select `Save` button to save to the gps module's live settings.
    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
@@ -139,6 +140,27 @@ You will want to do 4 things with U-Center to get your gps module setup.
    - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
    - Select `Save` button to save to the gps module's live settings.
    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+
+U-Center can also be used to test your NTRIP server settings.
+- Connect your gps receiver to your computer with a USB cable; the gps receiver should then be powered and ready to communicate with the computer.
+    - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from your computer's USB to the UART pins on your gps receiver.
+- Launch U-Center and connect to the gps receiver. 
+    - Open the `Receiver` menu, then the `connection` dialog and select the COM port that the gps receiver to which the gps receiver.  U-Center seems pretty smart about showing the port that is most likely the gps receiver.
+    - Open the `Receiver` menu, then the `baudrate` dialog and set the baudrate to match your gps receiver.  If you followed the directions above then that will be 115200 baud.  If the ZED-F9P is still in its default state, then the baudrate should be 38400.  If you have a knock-off gps receiver then it's probably 9600 baud.  RTFM if you can't figure it out.
+    - Once the COM port and baud rate are set then U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
+- If you have an RTK gps receiver, then connect to your NTRIP server.
+    - Open the `Receiver` menu, then the `NTRIP client` dialog.
+    - In the `NTRIP client settings` dialog enter the NTRIP server's address and port.  You can get these from the organization's website.  For instance, the UNAVCO server is at address `rtgpsout.unavco.org` and port 2101.  
+    - Next input your username and password for the server.  You should have gotten this when you signed up for an account with the organization.  For instance my UNAVCO username and password 'imnotthat' and 'stupid'.
+    - Finally you need to specify the NTRIP mount point for the server you plan on using.  Again, your organization's website should have a listing of the available mount points (these are the base stations by another name).  Pick the one that is closest to you.  You should be within 35km for this to work well.  Note that you can pull down the list of mount points by selecting the `Update source table` button; it will ask the server for all the mount points.  You can select a mount point from the list.  You can see details about the available mount points; choose the `Mount point details` button.  When I did that I noticed the mount point I use only connects to GPS and GLONASS satellites; that makes me want to go back and change my RATE to 15hz since I am only getting corrections for those two satellite systems.
+    - Once you have entered the server address, port, username, password and mount point, select the `OK` button.  At this point U-Center should connect to the NTRIP server and start downloading corrections and then send them to the gps receiver.
+    - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also U-Center on the right there is a panel that shows various statistics, including 2D accuracy.  
+
+<p align="center">
+  <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" />
+  <p align="center">U-Center accuracy</p>
+</p>
+
 
 ### RTKLIB
 RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
