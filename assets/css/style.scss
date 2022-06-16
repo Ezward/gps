@@ -22,7 +22,7 @@ nav > ul {
   padding-inline-start: 0; /* no padding in outermost list */
 }
 nav > ul > li {
-  padding-top: 0.5em; /* padding before each top level item */
+  padding-bottom: 0.5em; /* padding before each top level item */
 }
 a:hover, a:focus {
   color: blue;
