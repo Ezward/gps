@@ -9,6 +9,9 @@ ol, ul {
 ul {
   list-style-type: square;
 }
+ul > li {
+  padding-bottom: 0.5em; /* padding after each top level item */
+}
 nav {
   padding: 0;
 }
@@ -22,7 +25,7 @@ nav > ul {
   padding-inline-start: 0; /* no padding in outermost list */
 }
 nav > ul > li {
-  padding-bottom: 0.5em; /* padding before each top level item */
+  padding-bottom: 0.5em; /* padding after each top level item */
 }
 a:hover, a:focus {
   color: blue;
