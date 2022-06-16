@@ -3,14 +3,11 @@
 
 @import "{{ site.theme }}";
 ol, ul {
-    margin: 0;
     padding-left: 1em;
 }
 ul {
+  margin: 0;
   list-style-type: square;
-}
-p, ol {
-  margin: 0, 0, 1em; /* padding after each top level item */
 }
 nav {
   padding: 0;
