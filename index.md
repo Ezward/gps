@@ -116,30 +116,30 @@ So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi con
 You will want to do 4 things with U-Center to get your gps module setup.  
 
 1. Install U-Center
-   - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
-   - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
-       - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
+    - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
+    - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
+        - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
 
 2. You will want to increase the default baud rate on the serial ports.  
-   - Connect your gps receiver to your computer that is running U-Center with a USB cable.
-       - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from you computer to the UART pins on your gps receiver.
-   - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
-   - Open the `View` menu, then the `Configuration` view and choose the `PRT (ports)` port configuration.
-   - Update UART1 and UART2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
-       - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
-   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+    - Connect your gps receiver to your computer that is running U-Center with a USB cable.
+        - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from you computer to the UART pins on your gps receiver.
+    - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
+    - Open the `View` menu, then the `Configuration` view and choose the `PRT (ports)` port configuration.
+    - Update UART1 and UART2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
+        - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
+    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 3. You will want to increase the rate at which the gps receiver outputs position estimates.  By default, most gps receivers only output one per second.  That is a little slow for racing, so we want faster position updates.  The [ZED-F9P Data Sheet](https://content.u-blox.com/sites/default/files/ZED-F9P-04B_DataSheet_UBX-21044850.pdf) indicates that the max rate is 7hz when using 4 satellite systems, 10hz when using 3 satellite systems and 15hz when using two satellite systems.  More simultaneous satellite systems is more accurate, but slower.  We will take the compromise of 10hz.  Note that the NEO-8 is limited to an update rate of 5hz in order to maintain contact with two satellite system. 
-   - In u-center, open `View` then `Configuration` view and then `RATE (rates)`
-   - Set the `Measurement Period` to 100ms to get a 10 hz update rate (NEO-8 owners should use 200ms for 5hz).
-   - Select `Save` button to save to the gps module's live settings.
-   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+    - In u-center, open `View` then `Configuration` view and then `RATE (rates)`
+    - Set the `Measurement Period` to 100ms to get a 10 hz update rate (NEO-8 owners should use 200ms for 5hz).
+    - Select `Save` button to save to the gps module's live settings.
+    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 4. If you are using RTK gps, you will also want to increase the resolution of the position values in the NMEA messages.  RTK outputs a higher resolution position than standard NMEA can handle (it doesn't provide enough decimal places in the position values), we we want to change that.
-   - In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
-   - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
-   - Select `Save` button to save to the gps module's live settings.
-   - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+    - In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
+    - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
+    - Select `Save` button to save to the gps module's live settings.
+    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
 U-Center can also be used to test your NTRIP server settings.
 - Connect your gps receiver to your computer with a USB cable; the gps receiver should then be powered and ready to communicate with the computer.
