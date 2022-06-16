@@ -106,7 +106,7 @@ But what if you have to use your own base station rather than a publicly availab
 Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.  First a pretty picture to set the mood.
 
 <p align="center">
-  <img src="img/donkeycar_gps.jpg" style="height: 75%; width: 75%; display: block;" alt="DonkeyCar with Sparkfun RTK GPS" />
+  <img src="img/donkeycar_gps.jpg" style="display: block;" alt="DonkeyCar with Sparkfun RTK GPS" />
   DonkeyCar with Sparkfun RTK GPS
 </p>
 
@@ -405,6 +405,7 @@ So this is good if I am reading corrections over the internet; I can read them f
 However, if I am in a place where I want to use an NTRIP server, but I don't have good fixed internet, then I will need another option.  There are a few I could use;
 - Use an Android NTRIP client on my phone. pair my phone with the RaspberryPi or Jetson Nano via Bluetooth.  The Android NTRIP client receive the corrections over the mobile internet and then sends the corrections to the RPi/Nano over bluetooth serial.  Then we can forward the corrections, using str2str running on the RPi/Nano, over the USB serial to the ZED-F9P.  The RPi/Nano can read NMEA using the GPIO serial connected to the ZED-F9P corrections port.
 - We could get real hacky and tape our phone to the Donkeycar (or maybe put it in an pouch or envelope and tape that to the car; that might be better for your phone).  Turn on the phone's mobile hotspot (a word to the wise; do that before you tape it to the car), have the RPi/Nano connect to it via Wi-Fi, then stream corrections from you favorite NTRIP server via the mobile internet.  Beyond the hotspot setup all the software setup and hardware connections are the same as if streaming directly over fixed Wi-Fi.
+
 
 
 ### Where art thine UART oh RPi? 
