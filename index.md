@@ -158,9 +158,9 @@ U-Center can also be used to test your NTRIP server settings.
     - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also U-Center on the right there is a panel that shows various data, including 2D accuracy and Fix mode.  As the fix improves, fix mode will go from `2D`, to `3D`, to `3D/DGNSS` as more satellites are acquired.  When corrections can be applied the fix mode will transition to `3D/DGNSS/FLOAT` and finally `3D/DGNSS/FIXED`; at that point you should see very high accuracy.
 
 <p/>
-<p align="center">
+<p align="center" style="margin:0;">
   <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" />
-  <p align="center" style="margin:0;">U-Center accuracy</p>
+  U-Center accuracy
 </p>
 
 
