@@ -141,6 +141,7 @@ You will want to do 4 things with U-Center to get your gps module setup.
     - Select `Save` button to save to the gps module's live settings.
     - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
 
+
 U-Center can also be used to test your NTRIP server settings.
 - Connect your gps receiver to your computer with a USB cable; the gps receiver should then be powered and ready to communicate with the computer.
     - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from your computer's USB to the UART pins on your gps receiver.
