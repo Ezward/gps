@@ -160,7 +160,7 @@ U-Center can also be used to test your NTRIP server settings.
 <p/>
 <p align="center">
   <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" />
-  <p align="center" style="margin: 0;">U-Center accuracy</p>
+  <p align="center" style="margin:0;">U-Center accuracy</p>
 </p>
 
 
