@@ -5,8 +5,8 @@
 I want to race RC cars.  I don't want to actually drive them.  I'd probably suck at it.  I'm really pretty sure about that.  So they have to drive themselves.  There are a bunch a ways to get an RC to drive itself.  When you are outside gps is a good choice, but it has to be the right kind of gps and it must be setup the right way.  You also need software to read and interpret the data sent by the gps.  My automonous RC car uses the [DonkeyCar](https://www.donkeycar.com/) framework for small scale car racing, so I'm adding gps support to that framework.  An autonomous car also needs a computer to run the software.  DonkeyCar supports the Raspberry Pi or the Nvidia Jetson Nano as the brains of the car.  I've tried both, but one worked better than the other for this purpose.  More after this commercial break...
 
 <p align="center">
-  <img src="img/donkeycar.png" style="height: 50%; width: 50%;" alt="A DonkeyCar" />
-  <p align="center" style="margin: 0">A <a href="https://www.donkeycar.com/">DonkeyCar</a></p>
+  <img src="img/donkeycar.png" style="height: 75%; width: 75%;" alt="A DonkeyCar" />
+  <p align="center" style="margin: 0;">A <a href="https://www.donkeycar.com/">DonkeyCar</a></p>
 </p>
 
 Just kidding, no one would sponsor me.  It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
@@ -21,14 +21,14 @@ Next, let's talk about the kinds of gps devices available for talking to the sat
 
 <p align="center">
   <img src="https://cdn.sparkfun.com//assets/parts/1/5/3/5/2/16481-SparkFun_GPS-RTK-SMA_Breakout_-_ZED-F9P__Qwiic_-01a.jpg" style="height: 75%; width: 75%;" alt="SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)" />
-  <p align="center" style="margin: 0"><a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a></p>
+  <p align="center" style="margin: 0;"><a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a></p>
 </p>
 
 Other companies produce ZED-F9P based boards.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the antenna and costs a little less than the SparkFun board without the antenna.
 
 <p align="center">
   <img src="https://www.mouser.com/images/ardusimple/hd/AS-STARTKIT-BASIC-L1L2-NH-02_SPL.jpg" style="height: 50%; width: 50%;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
-  <p align="center" style="margin: 0"><a href="https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a></p>
+  <p align="center" style="margin: 0;"><a href="https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a></p>
 </p>
 
 What is it with these product names?  Anyway, U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
@@ -37,15 +37,15 @@ U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a
 
 <p align="center">
   <img src="img/u-center.png" style="height: 75%; width: 75%;" alt="U-Center" />
-  <p align="center" style="margin: 0"><a href="https://www.u-blox.com/en/product/u-center">U-Center</a></p>
+  <p align="center" style="margin: 0;"><a href="https://www.u-blox.com/en/product/u-center">U-Center</a></p>
 </p>
 
 ### How accurate is gps?
 Good question.  Here is the crappy answer: it depends.  Let's just assume you have a great view of the sky; then [GPSInsight](https://help.gpsinsight.com/deep-dive/how-accurate-is-gps-technology/) suggests that gps should yield an accuracy of 2meters CEP (Circular Error Probability); that means that 50% of readings will fall within a circle with a radius of 2m.  The other 50% will be outside.  This is a bit of a weird way to measure accuracy of gps; this is because CEP assumes a Guassian error distribution.  However, if you make a whole bunch of readings over a period of time while staying in one place, you will notice that the errors are not randomly distributed around a center; they are more like a random walk.  In fact, the is error not really random; much of it is caused by atmospheric changes; these are not really random, but instead cause the position to look like it is moving on a path over time, even though you stay in one place.  Here is an chart I created using the gps code I created for DonkeyCar.  It represents 1 sample per second for 100 seconds;
 
 <p align="center">
-  <img src="img/random_walk.png" style="height: 75%; width: 75%;" alt="Gps position readings over time while staying in place; 1 sample per second for 100 seconds" />
-  <p align="center" style="margin: 0">Gps position readings over time while staying in place; 1 sample per second for 100 seconds</p>
+  <img src="img/random_walk.png" alt="Gps position readings over time while staying in place; 1 sample per second for 100 seconds" />
+  <p align="center" style="margin: 0;">Gps position readings over time while staying in place; 1 sample per second for 100 seconds</p>
 </p>
 
 These positions are in [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) units; essentially the position in meters on the surface of the earth.  You can see the readings span about 5 meters vertically and 8.5 meters horizontally.  If we averaged all of these points we would get one measure of the center (the centroid); then we could find the 50 points closest to this center; that would be the CEP.
@@ -57,16 +57,16 @@ Think about this if you are relying on gps readings in order to know where your 
 Here are 1000 readings taken with an U-Blox NEO M8N with an active GPS/GNSS antenna and a good ground plane mounted on a tripod (basically, a good setup; more on antennas and ground planes later).  
 
 <p align="center">
-  <img src="img/m8n_tripod_base_1000_samples.png" style="height: 75%; width: 75%;" alt="U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds" />
-  <p align="center" style="margin: 0">U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
+  <img src="img/m8n_tripod_base_1000_samples.png" alt="U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds" />
+  <p align="center" style="margin: 0;">U-Blox NEO M8N position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
 </p>
 
 The points are within A 5 meter range in each direction.  So that is better than the first figure, which was done with a non-active antenna and no base plane.
 
 Next, this is 1000 readings with a U-Blox ZED F9P, an active GPS/GNSS antenna and a good ground plane mounted on a tripod, the same setup as the last set of readings.  
 <p align="center">
-  <img src="img/fp9_tripod_base_1000_samples.png" style="height: 75%; width: 75%;" alt="U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds" />
-  <p align="center" style="margin: 0">U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
+  <img src="img/fp9_tripod_base_1000_samples.png" alt="U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds" />
+  <p align="center" style="margin: 0;">U-Blox ZED F9P position readings over time while staying in place; 1 sample per second for 1000 seconds</p>
 </p>
 
 The points are within 2.5 meter range vertically and 1.25 meters horizontally.  So that is a even better than the NEO-N8M.  This shows the series 9 chipset is superior to the series 8.  But still, this is not accurate enough for navigating a short RC course where the lane may be less than 2 meters wide.  Also, we can't take 100 or 1000 readings at each position in order to get an average; we are racing!  We need multiple readings per second so we can see where the car is as it moves.  Crap, we are our of luck I guess.  But wait, there is more!
@@ -107,7 +107,7 @@ Ok, this is the section (maybe sections) where I'll give detailed instructions o
 
 <p align="center">
   <img src="img/donkeycar_gps.jpg" style="height: 75%; width: 75%;" alt="DonkeyCar with Sparkfun RTK GPS" />
-  <p align="center style="margin: 0"">DonkeyCar with Sparkfun RTK GPS</p>
+  <p align="center" style="margin: 0;">DonkeyCar with Sparkfun RTK GPS</p>
 </p>
 
 So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi connected to a Sparkfun ZED-F9P RTK GPS board via USB and GPIO serial.  In this case it is using an extra hardware backed UART (uart3) mapped to pins on the gpio bus.  This was required for reasons explained later.  So in this setup we want to get corrections into the RaspberryPi, either using RTKLIB or via an Android NTRIP client, and then send them via a serial port to the ZED-F9P. The following sections describe how to setup the software to do that.
@@ -160,7 +160,7 @@ U-Center can also be used to test your NTRIP server settings.
 <p/>
 <p align="center">
   <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" />
-  <p align="center" style="margin: 0">U-Center accuracy</p>
+  <p align="center" style="margin: 0;">U-Center accuracy</p>
 </p>
 
 
@@ -342,7 +342,7 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
 ## The Hardware: An Unexpected Journey
 
 <p align="center">
-  <img src="img/one_does_not_simply_stream.jpg" style="height: 75%; width: 75%;" alt="One does not simply stream RTCM3 to GPIO serial." />
+  <img src="img/one_does_not_simply_stream.jpg" alt="One does not simply stream RTCM3 to GPIO serial." />
 </p>
 
 The plan at the start was to stream the RTCM3 corrections from the RaspberryPi or Jetson Nano's default GPIO serial port to the ZED-F9P's corrections port (F9P UART2).  So the first thing that was needed was to solder the headers to the F9P so we can make physical connections using dupont jumper wires.  I'm not going to go into that; there are a lot of videos on YouTube on how to solder headers and what you need to do it.  My only suggestion is to practice a LOT before you try to solder headers to your $300 gps board.  And have some flux ready.
@@ -439,7 +439,7 @@ USB            <--->  USB
 
 <p align="center">
   <img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/5/9/5/GPIO.png" alt="RaspberryPi GPIO" />
-  <p align="center" style="margin: 0"><a href="https://learn.sparkfun.com/tutorials/introduction-to-the-raspberry-pi-gpio-and-physical-computing/gpio-pins-overview">RaspberryPi GPIO</a></p>
+  <p align="center" style="margin: 0;"><a href="https://learn.sparkfun.com/tutorials/introduction-to-the-raspberry-pi-gpio-and-physical-computing/gpio-pins-overview">RaspberryPi GPIO</a></p>
 </p>
 
 
