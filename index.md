@@ -36,7 +36,7 @@ What is it with these product names?  Anyway, U-Blox isn't the only game in town
 U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a piece of software called [U-Center](https://www.u-blox.com/en/product/u-center) that can be used to configure and operate U-Blox based devices.  It allows you to optimize the way the chipset works for how you want to use it, within limits.  U-Center is written for Microsoft Windows, but it can be run on Macintosh or Linux using the Wine emulation system.  I've successfully done this on Macintosh by following this [ArduSimple forum](https://www.ardusimple.com/question/running-u-center-on-mac-osx-wine/) post.  SparkFun has a good [introduction to U-Center](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all).
 
 <p align="center">
-  <img src="img/u-center.png" style="height: 75%; width: 75%; display: block;" alt="U-Center" />
+  <img src="img/u-center.png" style="display: block;" alt="U-Center" />
   <a href="https://www.u-blox.com/en/product/u-center">U-Center</a>
 </p>
 
@@ -157,7 +157,7 @@ U-Center can also be used to test your NTRIP server settings.
     - Once you have entered the server address, port, username, password and mount point, select the `OK` button.  At this point U-Center should connect to the NTRIP server and start downloading corrections and then send them to the gps receiver.
     - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also U-Center on the right there is a panel that shows various data, including 2D accuracy and Fix mode.  As the fix improves, fix mode will go from `2D`, to `3D`, to `3D/DGNSS` as more satellites are acquired.  When corrections can be applied the fix mode will transition to `3D/DGNSS/FLOAT` and finally `3D/DGNSS/FIXED`; at that point you should see very high accuracy.
 
-<p/>
+
 <p align="center">
   <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" style="display:block;"/>
   U-Center accuracy
@@ -170,6 +170,7 @@ RTKLIB is an open source software package written by Tomoji Takasu, that can use
 - http://www.rtklib.com/
 - [RTKLIB github](https://github.com/tomojitakasu/RTKLIB)
 - [RTKLIB Demo5; rtklibexplorer RTKLIB fork](https://github.com/rtklibexplorer/RTKLIB)
+
 
 #### Compile RTKLIB on RaspberryPi/Jetson Nano
 We can build RTKLIB on the nano and use it to request corrections over the internet and send them to a serial port.  We only need the str2str command line application, so we will only build that.  
@@ -272,6 +273,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
 - [Lefebure](http://lefebure.com/software/android-ntripclient/) 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lefebure.ntripclient)
 
+
 #### Configure Android NTRIP Client
 
 - Install Lefebure NTRIP client for android from the android store or from http://lefebure.com/software/android-ntripclient/
@@ -288,7 +290,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
     - `Receiver Connection` should be 'External via Bluetooth'
     - `Bluetooth Device` should be `raspberrypi'
     - Leave the other fields to the defaults.
-    
+
 
 #### Pair RPi/Nano and Phone over Bluetooth
 
@@ -363,6 +365,7 @@ GPIO on the 40 GPIO bus on the SBC (RaspberryPi or Jetson Nano)
   - On the RaspberryPi 4 the default gpio serial port is  `/dev/ttyAMA1`.
 - Board pin 10 is RX for uart2
 
+
 ```
 RPi/Nano            ZED-FP9   
 -----------------------------
@@ -384,9 +387,11 @@ Software setup (TLDR version)
     ```
 - Read NMEA messages on USB serial port, /dev/ttyACM0
 
+
 The bad news is that with this setup I never get to float mode on the ZED-F9P using either the RaspberryPi or the Jetson Nano; the `RTK` LED on the Sparkfun ZED-F9P stayed solidly lit.  Let me explain (isn't that what this whole article is for?); the ZED-F9P goes through stages as it develops a more accurate position estimate.  This is indicated by an LED on the Sparkfun ZED-F9P board labeled `RTK`.  When it is solid it is not using any corrections and so the position estimate is at its least accurate.  When it starts using corrections, but before most of its satellites are corrected, it is in 'float' mode.  In this mode the `RTK` LED blinks.  Float mode is more accurate, but more importantly it indicates that RTCM3 corrections data is getting to the ZED-F9P.  If you have a good view of the sky and you never get to float mode then it probably means the RTCM3 corrections are not getting to the gps board correctly.  Of course if you are in your basement then it doesn't matter if the corrections make it to the board; you can't see any satellites!  If you get to float mode then the next stage you are hoping for is 'fixed' mode.  In this mode the F9P can apply corrections to most of the satellites it can see and so its position estimate is optimal.  In 'fixed' mode the `RTK` LED goes off.  So, if the `RTK` is solidly lit, then things are _not_ working.
 
 So the bad news is that sending RTCM3 corrections from the RPi or Nano using the default gpio serial port does not seem to work. There is no error message from `str2str`; we just never get to float (and so never to fixed). But there is some good news; there is a simple work around.  Even better, there is a difficult work around (see [Where art UART oh RPi?](#here_art_uart_oh_rpi)).  The easy work around should be obvious to the most casual observer (or to me after several days of trying to make the GPIO serial work); don't try to send RTCM correction over the gpio serial; instead send them over the USB serial. Stupid. Simple. I got to 'fixed' on the Jetson Nano by streaming RTCM3 over the USB serial port.  Reading the NMEA from the GPIO serial port works fine, so we are set there.  Even better news, in 100 samples I got a range of 2.5 cm.  Notice the 'c' before that 'm'.  If it ain't broken, it's fixed and fixed is good.
+
 
 This the `str2str` command that worked (note that I have increased the baud rate of the ZED-F9P corrections port to 115200 baud using U-Center, more on that later); it gets the corrections from and NTRIP server over the internet and then sends then to the ZED-F9P via USB serial.
 ```
@@ -400,6 +405,7 @@ So this is good if I am reading corrections over the internet; I can read them f
 However, if I am in a place where I want to use an NTRIP server, but I don't have good fixed internet, then I will need another option.  There are a few I could use;
 - Use an Android NTRIP client on my phone. pair my phone with the RaspberryPi or Jetson Nano via Bluetooth.  The Android NTRIP client receive the corrections over the mobile internet and then sends the corrections to the RPi/Nano over bluetooth serial.  Then we can forward the corrections, using str2str running on the RPi/Nano, over the USB serial to the ZED-F9P.  The RPi/Nano can read NMEA using the GPIO serial connected to the ZED-F9P corrections port.
 - We could get real hacky and tape our phone to the Donkeycar (or maybe put it in an pouch or envelope and tape that to the car; that might be better for your phone).  Turn on the phone's mobile hotspot (a word to the wise; do that before you tape it to the car), have the RPi/Nano connect to it via Wi-Fi, then stream corrections from you favorite NTRIP server via the mobile internet.  Beyond the hotspot setup all the software setup and hardware connections are the same as if streaming directly over fixed Wi-Fi.
+
 
 ### Where art thine UART oh RPi? 
 As previously discussed ad nauseum, I have found that UART on the GPIO bus (gpio 14&15 exposed on board pins 8&10 respectively) to be unreliable; it is not based on a hardware UART and so is more prone to issues at higher speeds.  That bugged me, so even though I found a work around, I wanted to fix it.  I have not found a fix on the Jetson Nano, but it can be fixed on the RaspberryPi 4 (but not 3 or below; sorry).  By default the RPi uses two UARTs; one for the bluetooth functionality and one for the GPIO serial port.  The Bluetooth UART uses underlying hardware and so can handle very high baud rates with hardware handshaking.  The UART exposed on the GPIO bus is less capable.  Luckily the RPi 4 actually has 6 hardware-based UARTS. We can expose these by using device-tree overlays.  The device tree is data that is loaded at boot time that tells Linux which devices are attached and so which drivers to load.  A device tree overlay (dtoverlay) is a way of adding to the device tree without having to create a whole new one.  RaspberryPi OS has a bunch of available dtoverlays that can be used to turn on optional features.  We can list the ones that have to do with UARTs (see this RPi [forum](https://forums.raspberrypi.com/viewtopic.php?t=244827) discussion)
@@ -446,6 +452,7 @@ USB            <--->  USB
 ## Thanks, but is there someone around here that knows anything?
 ArduSimple makes gps boards and has excellent content.  
 - https://www.ardusimple.com/rtk-explained/
+
 
 Sparkfun makes lots of great stuff, including gps boards.  They are known for their excellent content explaining how to use their products.
 - https://learn.sparkfun.com/tutorials/what-is-gps-rtk
