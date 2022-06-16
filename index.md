@@ -157,7 +157,7 @@ U-Center can also be used to test your NTRIP server settings.
     - Once you have entered the server address, port, username, password and mount point, select the `OK` button.  At this point U-Center should connect to the NTRIP server and start downloading corrections and then send them to the gps receiver.
     - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also U-Center on the right there is a panel that shows various data, including 2D accuracy and Fix mode.  As the fix improves, fix mode will go from `2D`, to `3D`, to `3D/DGNSS` as more satellites are acquired.  When corrections can be applied the fix mode will transition to `3D/DGNSS/FLOAT` and finally `3D/DGNSS/FIXED`; at that point you should see very high accuracy.
 
-<p align="center">
+<p align="center" style="margin: 0">
   <img src="img/ucenter_accuracy.png" alt="U-Center Accuracy" />
   <p align="center">U-Center accuracy</p>
 </p>
