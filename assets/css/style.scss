@@ -3,6 +3,7 @@
 
 @import "{{ site.theme }}";
 ol, ul {
+    margin: 0;
     padding-left: 1em;
 }
 ul {
