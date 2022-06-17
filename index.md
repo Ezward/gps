@@ -17,14 +17,14 @@ First lets talk about gps satellites.  The term GPS (Global Positioning System) 
 So the gps receiver (more below) gets radio signals from the gps satellites.  Each satellite is transmitting a very exact time and it's current position in space.  When the gps receiver gets a time and satellite position, it calculates how long it took the signal to reach the receiver and can then calculate the distance to the satellite.  With 3 satellites the receiver can triangulate it's position on the surface of the Earth.  The reality is a little more complicated because the receiver uses many satellites and the Earth is not flat (glad I got that off my mind), but you get the idea.
 
 ### NEO ZED Blox What?
-Next, let's talk about the kinds of gps devices available for talking to the satellite systems.  Since the American GPS system was first early chips only talked to it.  Then when GLONASS came online chips came out that supported both GPS and GLONASS, even simultaneously.  Newer chips support GPS, GLONASS, BeiDou and Galileo and some of the smaller system.  The most popular devices are based on chips created by a company named [U-Blox](https://www.u-blox.com/).  They have lots of different GPS chips for various purposes and with varying capabilities.  Their latest chips are series 10.  You can still find series 6, 7, and 8 out there.  The series 8 chips are much better than 6 or 7; they support more kinds of satellites and more simultaneous satellite connections.  I'm using a device from Sparkfun with a series 9 chipset, the [SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)](https://www.sparkfun.com/products/16481).  The name really rolls off the tongue doesn't it?  Catchy.  Anyway, the ZED-F9P chipset is a big improvement over the NEO-8 series because it supports yet more satellite systems, more simultaneous connections and most importantly, it supports a second frequency band (L2) for higher precision measurements.  Newer is better.  Ask any baby.
+Next, let's talk about the kinds of gps receiver devices available for talking to the satellite systems.  Since the American GPS system was first, early chips only talked to it.  Then when GLONASS came online chips came out that supported both GPS and GLONASS, even simultaneously.  Newer chips support GPS, GLONASS, BeiDou and Galileo and some of the smaller systems.  The most popular devices are based on chips created by a company named [U-Blox](https://www.u-blox.com/).  They have lots of different GPS chips for various purposes and with varying capabilities.  Their latest chips are series 10.  You can still find series 6, 7, and 8 out there.  The series 8 chips are much better than 6 or 7; they support more kinds of satellites and more simultaneous satellite connections.  I'm using a device from Sparkfun with a series 9 chipset, the [SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)](https://www.sparkfun.com/products/16481).  The name really rolls off the tongue doesn't it?  Catchy.  Anyway, the ZED-F9P chipset is a big improvement over the NEO-8 series because it supports yet more satellite systems, more simultaneous connections and most importantly, it supports a second frequency band (L2) for higher precision measurements.  Newer is better.  Ask any baby.
 
 <p align="center">
   <img src="https://cdn.sparkfun.com//assets/parts/1/5/3/5/2/16481-SparkFun_GPS-RTK-SMA_Breakout_-_ZED-F9P__Qwiic_-01a.jpg" style="height: 75%; width: 75%; display: block;" alt="SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)" />
   <a href="https://www.sparkfun.com/products/16481">SparkFun GPS-RTK-SMA Breakout - ZED-F9P (Qwiic)</a>
 </p>
 
-Other companies produce ZED-F9P based boards.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the antenna and costs a little less than the SparkFun board without the antenna.
+Other companies produce ZED-F9P based boards.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the antenna and still costs a little less than the SparkFun board without the antenna.
 
 <p align="center">
   <img src="https://www.mouser.com/images/ardusimple/hd/AS-STARTKIT-BASIC-L1L2-NH-02_SPL.jpg" style="height: 75%; width: 75%; display: block;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
@@ -41,7 +41,7 @@ U-Blox does have an ace up its' sleeve relative to other chipsets; it provides a
 </p>
 
 ### How accurate is gps?
-Good question.  Here is the crappy answer: it depends.  Let's just assume you have a great view of the sky; then [GPSInsight](https://help.gpsinsight.com/deep-dive/how-accurate-is-gps-technology/) suggests that gps should yield an accuracy of 2meters CEP (Circular Error Probability); that means that 50% of readings will fall within a circle with a radius of 2m.  The other 50% will be outside.  This is a bit of a weird way to measure accuracy of gps; this is because CEP assumes a Guassian error distribution.  However, if you make a whole bunch of readings over a period of time while staying in one place, you will notice that the errors are not randomly distributed around a center; they are more like a random walk.  In fact, the is error not really random; much of it is caused by atmospheric changes; these are not really random, but instead cause the position to look like it is moving on a path over time, even though you stay in one place.  Here is an chart I created using the gps code I created for DonkeyCar.  It represents 1 sample per second for 100 seconds;
+Good question.  Here is the crappy answer: it depends.  Let's just assume you have a great view of the sky; then [GPSInsight](https://help.gpsinsight.com/deep-dive/how-accurate-is-gps-technology/) suggests that gps should yield an accuracy of 2meters CEP (Circular Error Probability); that means that 50% of readings will fall within a circle with a radius of 2m.  The other 50% will be outside.  This is a bit of a weird way to measure accuracy of gps; this is because CEP assumes a Guassian error distribution.  However, if you make a whole bunch of readings over a period of time while staying in one place, you will notice that the errors are not randomly distributed around a center; they are more like a random walk.  In fact, the is error not really random; much of it is caused by atmospheric changes; these are not really random, but instead cause the position to look like it is moving on a path over time, even though you stay in one place.  Here is an chart I created using the [gps code](https://github.com/autorope/donkeycar/blob/main/donkeycar/parts/gps.py) I created for DonkeyCar.  It represents 1 sample per second for 100 seconds;
 
 <p align="center">
   <img src="img/random_walk.png" style="display: block;" alt="Gps position readings over time while staying in place; 1 sample per second for 100 seconds" />
@@ -92,15 +92,15 @@ What if you don't have a fixed base station near enough to you?  That's simple; 
 
 
 ### Client Tell
-Ok, so we have a source of RTCM3 corrections, maybe sent over the Internet using the NTRIP protocol, but our gps receiver doesn't know anything about the Internet; it has serial ports (how 1980s) for communication.  How do we get the RTCM3 corrections to the gps receiver's serial ports?  Well we first need an NTRIP client to receive the RTCM corrections, then we write those corrections to a serial port on the gps receiver board either using a direction connection to the RaspberryPi/Jetson Nano or via a radio connected a ZED-F9P serial port.  
+Ok, so we have a source of RTCM3 corrections, maybe sent over the Internet using the NTRIP protocol, but our gps receiver doesn't know anything about the Internet; it has serial ports (how 1980s) for communication.  How do we get the RTCM3 corrections to the gps receiver's serial ports?  Well we first need an NTRIP client to receive the RTCM corrections, then we write those corrections to a serial port on the gps receiver board either using a direct connection to the RaspberryPi/Jetson Nano or via a radio connected a ZED-F9P serial port.  
 
-The ZED-F9P has several serial ports.  There is a serial port associated with the USB connection; this is very easy to use.  There are two other serial ports to which header pins can be soldered (so less easy).  Remember that picture of the Sparkfun-ZED-F9P-stupid-long-name above; look for the connections marked RX2/TX2; those are the receive/transmit pins respectively of the serial ports.  This is clearly explained in the [Sparkfun hookup guide](https://learn.sparkfun.com/tutorials/gps-rtk2-hookup-guide).  It also explains about antennas and ground plans and other setup stuff, including connecting to a corrections source, but we'll talk about that here as well.
+The ZED-F9P has several serial ports.  There is a serial port associated with the USB connection; this is very easy to use.  There are two other serial ports to which header pins can be soldered (so less easy).  Remember that picture of the Sparkfun-ZED-F9P-stupid-long-name-thing above; look for the connections marked RX2/TX2; those are the receive/transmit pins respectively of the serial ports.  This is clearly explained in the [Sparkfun hookup guide](https://learn.sparkfun.com/tutorials/gps-rtk2-hookup-guide).  It also explains about antennas and ground planes and other setup stuff, including connecting to a corrections source, but we'll talk about that here as well.
 
 So receiving the corrections; our Donkeycar has a RaspberryPi (or a Jetson Nano) and that has Wi-Fi.  So if the car is close enough to a Wi-Fi hotspot then it can use an NTRIP client to read the RTCM3 corrections from the base station over the internet, then send the corrections to the gps receiver over a serial connection.  If the car is not consistently close enough to a Wi-Fi hotspot (which it probably won't be), then you could use cellular data; I taped my phone to my car and put it into hotspot mode, then connected the RaspberryPi Wi-Fi to the phone's hotspot so it could access the Internet while it was driving. 
 
 A RaspberryPi also has Bluetooth and so does our phone.  So another way to get corrections using your phone is to get an NTRIP client mobile app on the phone and use it to get the corrections from a base station, then transmit the corrections to the RaspberryPi using Bluetooth serial.  The RaspberryPi would then forward the corrections to the gps receiver over a serial connection.  
 
-But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter of some sort to the base station's serial port; the base station transmits the RTCM3 connections to the serial port and so out to the radio.  On the car we then need a compatible radio connected to the gps receiver's serial port on the car, so the corrections are received by the radio and input to the gps receiver via the serial port to which the radio is connected.  That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
+But what if you have to use your own base station rather than a publicly available NTRIP server?  That might actually be the easiest scenario, but the most expensive.  In that case need a second RTK gps device to act as the base station; a device that can create RTCM3 corrections.  Then we still have the problem of getting the corrections from the base station to the gps receiver.  We could go through the RaspberryPi; maybe connect a Bluetooth radio to the serial output on the base station and have it received by the RaspberryPi's Bluetooth, then the RaspberryPi can forward it on to the gps receiver via a serial connection.  Alternatively we can cut the RaspberryPi out of the picture altogether; we can connect a radio transmitter base station gps' serial ports and a compatible radio receiver to the donkeycar gps' serial port; the base station transmits the RTCM3 connections via radio transmitter and they go directly to the gps receiver via it's radio. That is a common way to do this.  There are various radio technologies that could be used, but the best is LoRa.  LoRa radios have long range, which is good for us because it can cover a large track.  Further, a LoRa transmitter can be configured in broadcast mode so many LoRa receivers can listen for the data at the same time.  That works really well at a track with multiple competitors.
 
 ## The Secret Software Sauce
 Ok, this is the section (maybe sections) where I'll give detailed instructions on how I accomplished getting RTK gps to work on a Donkeycar.  Hopefully it will help you avoid a bunch of the experimentation I had to go through and make things faster for you.  First a pretty picture to set the mood.
@@ -119,43 +119,44 @@ You will want to do 4 things with U-Center to get your gps module setup.
     - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
     - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
         - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
+    - Launch U-Center and connect to the gps receiver.
+        - Open the Receiver menu, then the connection dialog and select the COM port that the gps receiver to which the gps receiver. U-Center seems pretty smart about showing the port that is most likely the gps receiver.
+        - Open the Receiver menu, then the baudrate dialog and set the baudrate to match your gps receiver. If the ZED-F9P is still in its default state, then the baudrate should be 38400. If you have a knock-off gps receiver then it’s probably 9600 baud. RTFM if you can’t figure it out.
+    - Once the COM port and baud rate are set then U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters.
+
 
 2. You will want to increase the default baud rate on the serial ports.  
-    - Connect your gps receiver to your computer that is running U-Center with a USB cable.
-        - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from you computer to the UART pins on your gps receiver.
-    - Launch U-Center and open the Messages view by pressing F8. Click the connect button and choose the correct serial port and baud rate.  U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
+    - Start U-Center and connect your gps receiver to your computer that is running U-Center as described in (1) above.
     - Open the `View` menu, then the `Configuration` view and choose the `PRT (ports)` port configuration.
     - Update UART1 and UART2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
         - If you are connected via either of these ports and telemetry from gps board stops, then go to "Receiver -> Baud rate" menu in the main window and select the new baud rate there. Confirm that NMEA messages in the Text Console resumed updating (meaning that u-center has successfully re-established the communication with the device at the new baud rate), then continue.
     - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+        - Note that some gps receivers, like the SAM-M8Q, so not have flash.  Instead they have battery backed memory. So they won't save to flash, but you settings should stay intact as long as the battery is charged.
 
 3. You will want to increase the rate at which the gps receiver outputs position estimates.  By default, most gps receivers only output one per second.  That is a little slow for racing, so we want faster position updates.  The [ZED-F9P Data Sheet](https://content.u-blox.com/sites/default/files/ZED-F9P-04B_DataSheet_UBX-21044850.pdf) indicates that the max rate is 7hz when using 4 satellite systems, 10hz when using 3 satellite systems and 15hz when using two satellite systems.  More simultaneous satellite systems is more accurate, but slower.  We will take the compromise of 10hz.  Note that the NEO-8 is limited to an update rate of 5hz in order to maintain contact with two satellite system. 
-    - In u-center, open `View` then `Configuration` view and then `RATE (rates)`
+    - In u-center, open the `View` menu, then the `Configuration` view and then the `RATE (rates)` dialog.
     - Set the `Measurement Period` to 100ms to get a 10 hz update rate (NEO-8 owners should use 200ms for 5hz).
-    - Select `Save` button to save to the gps module's live settings.
-    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+    - Select the `Save` button to save to the gps module's live settings to ram.
+    - Select the `Close` button and u-center will ask if you want to save the settings to flash; allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+        - Note that some gps receivers, like the SAM-M8Q, so not have flash.  Instead they have battery backed memory. So they won't save to flash, but you settings should stay intact as long as the battery is charged.
 
 4. If you are using RTK gps, you will also want to increase the resolution of the position values in the NMEA messages.  RTK outputs a higher resolution position than standard NMEA can handle (it doesn't provide enough decimal places in the position values), we we want to change that.
     - In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
     - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
-    - Select `Save` button to save to the gps module's live settings.
-    - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+    - Select the `Save` button to save to the gps module's live settings.
+    - Select the `Close` button and u-center will ask if you want to save the settings to flash; allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
+        - Note that some gps receivers, like the SAM-M8Q, so not have flash.  Instead they have battery backed memory. So they won't save to flash, but you settings should stay intact as long as the battery is charged.
 
 
 U-Center can also be used to test your NTRIP server settings.
-- Connect your gps receiver to your computer with a USB cable; the gps receiver should then be powered and ready to communicate with the computer.
-    - If your gps receiver does not have a USB port, then use USB-UART adapter to connect from your computer's USB to the UART pins on your gps receiver.
-- Launch U-Center and connect to the gps receiver. 
-    - Open the `Receiver` menu, then the `connection` dialog and select the COM port that the gps receiver to which the gps receiver.  U-Center seems pretty smart about showing the port that is most likely the gps receiver.
-    - Open the `Receiver` menu, then the `baudrate` dialog and set the baudrate to match your gps receiver.  If you followed the directions above then that will be 115200 baud.  If the ZED-F9P is still in its default state, then the baudrate should be 38400.  If you have a knock-off gps receiver then it's probably 9600 baud.  RTFM if you can't figure it out.
-    - Once the COM port and baud rate are set then U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters. 
+- Start U-Center and connect your gps receiver to your computer that is running U-Center as described in (1) above.
 - If you have an RTK gps receiver, then connect to your NTRIP server.
     - Open the `Receiver` menu, then the `NTRIP client` dialog.
     - In the `NTRIP client settings` dialog enter the NTRIP server's address and port.  You can get these from the organization's website.  For instance, the UNAVCO server is at address `rtgpsout.unavco.org` and port 2101.  
-    - Next input your username and password for the server.  You should have gotten this when you signed up for an account with the organization.  For instance my UNAVCO username and password 'imnotthat' and 'stupid'.
+    - Next input your username and password for the server.  You should have gotten this when you signed up for an account with the organization.  For instance my UNAVCO username and password is 'imnotthat' and 'stupid'.
     - Finally you need to specify the NTRIP mount point for the server you plan on using.  Again, your organization's website should have a listing of the available mount points (these are the base stations by another name).  Pick the one that is closest to you.  You should be within 35km for this to work well.  Note that you can pull down the list of mount points by selecting the `Update source table` button; it will ask the server for all the mount points.  You can select a mount point from the list.  You can see details about the available mount points; choose the `Mount point details` button.  When I did that I noticed the mount point I use only connects to GPS and GLONASS satellites; that makes me want to go back and change my RATE to 15hz since I am only getting corrections for those two satellite systems.
-    - Once you have entered the server address, port, username, password and mount point, select the `OK` button.  At this point U-Center should connect to the NTRIP server and start downloading corrections and then send them to the gps receiver.
-    - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also U-Center on the right there is a panel that shows various data, including 2D accuracy and Fix mode.  As the fix improves, fix mode will go from `2D`, to `3D`, to `3D/DGNSS` as more satellites are acquired.  When corrections can be applied the fix mode will transition to `3D/DGNSS/FLOAT` and finally `3D/DGNSS/FIXED`; at that point you should see very high accuracy.
+    - Once you have entered the server address, port, username, password and mount point, select the `OK` button.  At this point U-Center should connect to the NTRIP server and start downloading corrections and then sending them to the gps receiver.
+    - As corrections are applied you should see the LED on the ZED-F9P transition from solidly lit to blinking.  Notice also that in U-Center, on the right, there is a panel that shows various data, including 2D accuracy and Fix mode.  As the fix improves, fix mode will go from `2D`, to `3D`, to `3D/DGNSS` as more satellites are acquired.  When corrections can be applied the fix mode will transition to `3D/DGNSS/FLOAT` and finally `3D/DGNSS/FIXED`; at that point you should see very high accuracy.
 
 <p></p>
 <p align="center">
@@ -165,7 +166,7 @@ U-Center can also be used to test your NTRIP server settings.
 
 
 ### RTKLIB
-RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  This has way more capability than we will be using.  We really only need one of it's command line utilities; str2str.  str2str can connect to an NTRIP server and then write the corrections to up to 3 outputs.  I can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
+U-Center is a Windows GUI application; it is not suitable for running on our RaspberryPi or Jetson Nano, so we need another way to read corrections from our NTRIP server.  RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  RTKLIB has way more capability than we will be using.  We really only need one of it's command line utilities; str2str (stream to stream).  str2str can connect to an NTRIP server and then write the corrections to up to 4 outputs.  It can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
 
 - http://www.rtklib.com/
 - [RTKLIB github](https://github.com/tomojitakasu/RTKLIB)
@@ -173,9 +174,9 @@ RTKLIB is an open source software package written by Tomoji Takasu, that can use
 
 
 #### Compile RTKLIB on RaspberryPi/Jetson Nano
-We can build RTKLIB on the nano and use it to request corrections over the internet and send them to a serial port.  We only need the str2str command line application, so we will only build that.  
+We can build RTKLIB use it to request corrections over the internet and send them to a serial port.  We only need the str2str command line application, so we will only build that.  
 
-You must have the `GCC` compiler and the `make` build utility available.  These are pretty much always available on a Linux system.  However for MacOS you must install the XCode toolset; so first, open the Mac App Store and install Xcode for free. Then, open Xcode, go to Xcode menu (on the menu bar) > Preferences > Downloads, and install Command Line Tools. You will get commands like gcc, make, purge...  Windows is an inhospitable place for gcc, but you can give it a try.  Here is a way to install GCC; https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/  Another ways to try this on windows is to install Linux Subsystem For Linux from the Windows store; then you have a nice linux shell as part of Windows.  
+You must have the `GCC` compiler and the `make` build utility available.  These are pretty much always available on a Linux system.  However for MacOS you must install the XCode toolset; so first, open the Mac App Store and install Xcode for free. Then, open Xcode, go to Xcode menu (on the menu bar) > Preferences > Downloads, and install Command Line Tools. You will get commands like gcc, make, purge...  Windows is an inhospitable place for gcc, but you can give it a try.  Here is a way to install GCC; https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/  Another way to try this on windows is to install the Linux Subsystem For Windows (LSW) from the Windows store; then you have a nice Linux shell as part of Windows.  
 
 Once you have a working gcc and make, just clone the repo, checkout the 2.4.3 branch and build str2str.  The executable will end up in the gcc folder.
 
@@ -185,15 +186,15 @@ cd RTKLIB/app/consapp/str2str/gcc
 make
 ```
 
-If you have the gps board connected to the computer then you can send the corrections via USB serial.  It is also possible to connect a serial port on the Sparkfun F9P SMA board directly to the serial port exposed on the RaspberryPi/Jetson gpio bus. In our final setup we will need to send corrections to one serial port and read NMEA sentences from another, so we will need both the USB and the gpio serial ports. The general format of the command to output RTCM3 a serial port is:
+If you have the gps board connected to the computer then you can send the corrections via USB serial.  It is also possible to connect a serial port on the Sparkfun F9P SMA board directly to the serial port exposed on the RaspberryPi/Jetson gpio bus. In our final setup we will need to send corrections to one serial port and read NMEA sentences from another, so we will need both the USB and the gpio serial ports. The general format of the command to read from and NTRIP server and to output RTCM3 to a serial port is:
 ```
 ./str2str -in ntrip://USER:PASSWORD@CORS_IP:2101/MOUNT_POINT -b 1 -out serial://<device>:<baud>:8:n:1
 ```
 
-RTKLIB manual is at http://www.rtklib.com/prog/manual_2.4.2.pdf  It has more details.
+The RTKLIB manual is at http://www.rtklib.com/prog/manual_2.4.2.pdf  It has more details.
 
 #### Connect to an NTRIP server
-Once you have build str2str, try to use it to get RTCM corrections from an NTRIP server and output them to the console to make sure you account credentials are working.  In this case it is using a UNAVCO server in Sonoma California:
+Once you have build str2str, try to use it to get RTCM corrections from an NTRIP server and output them to the console to make sure you account credentials are working.  In this case it is using a UNAVCO server in Sonoma California.  Run this from the `RTKLIB/app/consapp/str2str/gcc` folder where you build str2str.
 
 ```
 ./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3
@@ -201,6 +202,12 @@ Once you have build str2str, try to use it to get RTCM corrections from an NTRIP
 
 If that works then your credentials and server address are correct.  
 
+In the field, like at a race track, you may not have nice fixed WiFi like you do at home.  There are various options to deal with that, but one way is to simply use your phone as a WiFi hotspot.  In that case you connect your RaspberryPi/JetsonNano to your phone's WiFi hotspot to get Internet.  Everything else is the same as fixed WiFi, except you probably want to tape your phone to your Donkeycar so that it is never out of range while you are racing.
+
+#### Writing to the serial port
+While the RaspberryPi and Jetson Nano gpio headers look the same, we need to set them up slightly differently.  On both machines the operating system may be using the serial port on the gpio header as a login port (one culd hookup a terminal to it to login).  That could interfere with our usage of the port.  So we want to turn off that behavior.  Its a little different for RPi and Nano. 
+
+##### The Jetson Nano serial port
 See this JetsonHacks [video](https://jetsonhacks.com/2019/10/10/jetson-nano-uart/) for using the serial ports on the Jetson Nano GPIO header. To output to Jetson Nano's serial port you must have permissions to read/write the serial port.  Run this command to add your user to the dialout group.
  ```
  sudo usermod -aG dialout $(whoami)
@@ -218,17 +225,24 @@ systemctl disable nvgetty
 udevadm trigger
 ```
 
-Now you can run str2str and give it the serial port as an output destination.  The Sparkfun F9P breakout board's RTCM correction port (UART2) defaults to 38400bps.  We need to make the serial port on the Nano that we are transmitting from match that baud rate.
+##### The RaspberryPi serial port
+We want to enable the gpio serial port and we want to turn of the login server on the gpio serial port.  This can be done using the raspi-config utility.  See this [article](https://www.abelectronics.co.uk/kb/article/1035/serial-port-setup-in-raspberry-pi-os) for a detailed walkthrough.  I'll repeat the essentials here.
+- In a command prompt run 'raspi-config' and it will show the RaspberryPi configuration screen.
+- Open the `Interface Options` window (press `3` or arrow down to the menu and select return).
+- With the `Interface Options` window open, arrow to `Serial Port Enable/Disable..." and select return.  It will ask if you want to enable the serial port and whether to enable or disable login shell over serial; choose to disable login over serial.
+
+
+So now that the serial port is available, our user can access it and the login shell is not trying to thwart our efforts, we can run str2str and give it the serial port as an output destination.  We have to make sure the baud rate of the serial port matches the baud rate of the gps receiver's serial port.  The Sparkfun F9P breakout board's RTCM correction port (UART2) defaults to 38400bps.  We need to make the serial port on the RPi/Nano that we are transmitting from match that baud rate.
 ```
 sudo stty -F /dev/ttyTHS1 38400
 ```
 
-Make sure you are in the gcc folder where we built the str2str application.  Run the application and specify the ntrip server as the input and the serial port as the output.  This example reads the corrections from a UNAVCO NTRIP server and sends them to a serial port using the default baud rate for the F9P serial ports.
+Make sure you are in the `RTKLIB/app/consapp/str2str/gcc` folder where we built the str2str application.  Run str2str and specify your ntrip server as the input and the serial port as the output.  This example reads the corrections from a UNAVCO NTRIP server and sends them to a serial port using the default baud rate for the F9P serial ports.
 ```
 ./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyTHS1:38400:8:n:1
 ```
 
-As we will see later, it is possible to use U-Center to configure the F9P serial port to use a higher baud rate.  We will want to do that.  When we do that then we will also want the Nano's serial port to use that higher baud rate before connecting to str2str.  Here is a command to set the serial port to 115200 baud.  
+As we saw earlier, it is possible to use U-Center to configure the F9P serial port to use a higher baud rate.  We will want to do that.  When we do that then we will also want the Nano's serial port to use that higher baud rate before connecting to str2str.  Here is a command to set the serial port to 115200 baud.  
 ```
 sudo stty -F /dev/ttyTHS1 115200
 ```
@@ -238,12 +252,12 @@ Note that you do not have to do this for the USB serial port; it can autodetect 
 ./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyUSB0:230400:8:n:1
 ```
 
-Note that you could _also_ output to a file to capture the data or to help in debugging.  str2str can write to to up to 4 -out destinations.
+Note that you could _also_ output from str2str to a file to capture the data or to help in debugging.  str2str can write to to up to 4 -out destinations.
 ```
 ./str2str -in ntrip://USER:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out ./rtcm.txt -out serial://ttyTHS1:38400:8:n:1 -p 38.23983 -122.45170 -25.074
 ```
 
-Note the `-p` longitude latitude altitude arguments.  Normally a base station sends it's exact position as part of the RTCM stream.  Some servers might not OR you might be using your own server and need to specifiy it's exact location this way.
+Note the `-p` longitude latitude altitude arguments in this example.  They don't have anything to do with the extra output; they specify the precise (very, very, very, very carefully measured) position of the base station.  Normally a base station sends it's exact position as part of the RTCM stream.  Some servers might not OR you might be using your own server and need to specifiy it's exact location this way.
 
 The output of str2str looks like this when it first starts
 ```
@@ -255,20 +269,22 @@ stream server start
 2022/05/06 22:53:55 [CC---]       4627 B    2517 bps (0) rtgpsout.unavco.org/P200_RTCM3 (1) /dev/ttyTHS1
 
 ```
-These are not the corrections; they are logging statements emitted by the running application. The `[WC---]` box is for the status of connections.  The first letter is for connection (0), the input connection, subsequent letters for for up to 4 outputs.  
+The output is not the corrections; the output logging statements emitted by the running application. The `[WC---]` box is for the status of connections.  The first letter is for connection (0), the input connection, subsequent letters for for up to 4 outputs.  
 - W = waiting for connection
 - C = connected
 - E = error
 
-For both the RaspberryPi and the Jetson Nano there are 3 pins that will want to connect to the F9P if we want to use the gpio serial port to send corrections from the computer to the gps board:
-- pin board 6 is ground
-- pin board 8 txd; tty transmit
-- pin board 10 is rxd; tty receive
+For both the RaspberryPi and the Jetson Nano there are 3 pins that we will want to connect to the F9P to communicate between serial ports:
+- RPi/Nano board pin 6 is ground
+- RPi/Nano board pin 8 txd (serial transmit)
+- RPi/Nano board pin 10 is rxd (serial receive)
 
-Note that we have NOT connect any positive voltage.  There is no need; the F9P board will be powered when it is connection to the USB port, so we do not need to power it through the serial pins.
+Note that we do NOT connect any positive voltage.  There is no need; the F9P board will be powered when it is connection to the USB port, so we do not need to power it through the serial pins.  If your gps receiver does not have a USB port, you will need to power via the VCC pin; most chipsets use 3.3v and NOT 5v, so make sure your USB to UART adapter can be set to use 3.3v.
 
 ### Lefebure NTRIP Client for Android
-Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth SPP connection to the gps receiver if the receiver has an attached bluetooth radio or to the RaspberryPi, which would then forward to the gps receiver via RTKLIB str2str.  
+Lefebure offers a free NTRIP client and NMEA data logger for Android. With the Android NTRIP client, your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth.  The gps receiver can get the corrections in one of two ways.
+- If the receiver has a bluetooth radio connected to its serial port, then the phone would be paired to that radio and the corrections would go directly from the phone to the gps receiver via the bluetooth radio.
+- If the receiver is connected to a RaspberryPi or Jetson Nano, then the RPi/Nano would pair to the phone and the corrections would go from the phone to the RPi/Nano via bluetooth.  The RPI/Nano would then forward to the gps receiver using RTKLIB and str2str as previously explained.  
 
 - [Lefebure](http://lefebure.com/software/android-ntripclient/) 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lefebure.ntripclient)
@@ -276,48 +292,48 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. Your phone
 
 #### Configure Android NTRIP Client
 
-- Install Lefebure NTRIP client for android from the android store or from http://lefebure.com/software/android-ntripclient/
+- Install Lefebure NTRIP client for Android from the android store or from http://lefebure.com/software/android-ntripclient/
 - Configure the NTRIP source on Lefebure NTRIP client
-    - Configure the NTRIP settings to connect to your NTRIP server.  Note that the interface wants an ip address, not a url.  You can usually get the ip address either from the orgnanization's website, or just run the `ping` command with the server's url and it will usually yield the ip address.
+    - Configure the NTRIP settings to connect to your NTRIP server.  Note that the application wants an ip address, not a url.  You can usually get the ip address either from the organization's website, or just run the `ping` command with the server's url and it will usually yield the ip address.
         ```
         $ ping rtgpsout.unavco.org
         PING saturn.unavco.org (69.44.86.36): 56 data bytes
         Request timeout for icmp_seq 0
         ```
     - See how it resolved `rtgpsout.unavco.org` to the ip address `69.44.86.36`. 
-- Once you setup the caster, you can connect in 'test' mode (no receiver) to see if the client will connect.
+
+Once you setup the NTRIP caster, you can connect in 'test' mode (no receiver) to see if the client will connect and that you can read corrections.  Once you know you are getting corrections, then yo can configure a receiver that will get them.
+
 - Configure the receiver settings.  You may need to do this _after_ pairing the RaspberryPi and the phone (steps 1, 2 and 3 below) so that the raspberrypi device can be selected in the `Bluetooth Device` field.
     - `Receiver Connection` should be 'External via Bluetooth'
-    - `Bluetooth Device` should be `raspberrypi'
+    - `Bluetooth Device` should be `raspberrypi' (or whatever the nano device is named if using a nano)
     - Leave the other fields to the defaults.
 
+With both the NTRIP caster and the receiver configured, you can `Connect'.  It should connect to the ntrip server and then transmit the corrections to the receiver.
 
 #### Pair RPi/Nano and Phone over Bluetooth
 
-The bluetooth pairing (steps 1, 2 and 3 below) needs to be done only once on the Raspberry Pi to set it up to connect to the Android Bluetooth.  The process was adapted from what I found in this video: https://www.youtube.com/watch?v=sY06F_sPef4
+Bluetooth pairing (steps 1, 2 and 3 below) needs to be done only once on the Raspberry Pi to set it up to connect to the Android Bluetooth.  The process was adapted from what I found in this video: https://www.youtube.com/watch?v=sY06F_sPef4
 
 1. Setup Raspberry Pi for serial over bluetooth (SPP).  Add the SP profile to the Pi; edit `/etc/systemd/system/dbus-org.bluez.service`.  In the editor, 
-add the compatibility flaf `-C` to the ExecStart line.  If necessary, add a second line that starts the serial port (SP) service. NOTE: if you don't want the serial port service to start on every reboot, then leave this line out, in which case you will need start the serial port service manually before connecting the phone (see step 4 below).  When done editing; save the file.  The two lines in your `dbus-org.bluez.service` configuration should like this when you are done editing.   When satified reboot the RaspberryPi so this change takes affect.
+add the compatibility flag `-C` to the ExecStart line.  If necessary, add a second line that starts the serial port (SP) service which enables serial-over-bluetooth. NOTE: if you don't want the serial port service to start on every reboot, then leave this line out, in which case you will need to start the serial port service manually before connecting the phone (see step 4 below).  The two lines in your `dbus-org.bluez.service` configuration should like the example below.   When satified, save the file and reboot the RaspberryPi so the change takes affect.
     ```
     ExecStart=/usr/lib/bluetooth/bluetoothd -C
     ExecStartPost=/usr/bin/sdptool add SP
     ```
 
-2. Use the bluetoothctl command to pair and trust the phone
-    - Put the Android phone into bluetooth pairing mode
-    - Open a command prompt and start the bluetooth control application by entering `bluetoothctl`. You will be placed in the bluetoothctl shell.
-    - Type `agent on` and enter to run the `agent on` command.
+2. With serial-over-bluetooth enable, use the bluetoothctl command to pair and trust the phone
+    - On the the Android phone, start bluetooth pairing mode (look for new bluetooth devices)
+    - On the RPi, open a command prompt and start the bluetooth control application by entering `bluetoothctl`. You will be placed in the bluetoothctl shell.
+    - Run the `agent-on` command (type `agent on` and enter).
     - Run the `default-agent` command.
-    - Run the `scan on` command to start looking for devices.  It may take a minute, but you should see the device appear; take note of the 48 bit MAC address that is displayed; it will look something like `00:4d:e9:79:eb:a6`
+    - Run the `scan on` command to start looking for devices.  It may take a minute, but you should see the phone appear; take note of the 48 bit MAC address that is displayed; the MAC address will look something like `00:4d:e9:79:eb:a6` 
     - Run `scan off` once you have this information.
     - Run `pair <MAC>`, replacing <MAC> with the device’s MAC address.
     - Once paired, in the future you just have to connect, not pair.  So in the future just run `connect <MAC>` if the connection does not happen automatically.
     - Run `trust <MAC>` so we don't have to do this again in the future.
-
-3. Test the pairing.
-    - You should still be in the bluetoothctl shell. Run `paired-devices`. You should see the Android phone in the list of paired devices.
-    - Run quit to exit the bluetoothctl shell.
-    - You should now be back at the command prompt.
+    - Run `paired-devices`. You should see the Android phone in the list of paired devices.
+    - Run `quit` to exit the bluetoothctl shell.
 
 #### Send corrections from phone to RPi/Nano
 Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson Nano.
@@ -328,7 +344,7 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
     - Start the RaspberryPi listening for a connection on bluetooth serial so it will automatically connect when the Android phone is available.
         - Run `sudo rfcomm watch hci0`.
     - In the Lefebure NTRIP app, choose `Connect`.
-    - On the raspberrypi you should see should it connect on a  bluetooth serial port (`/dev/rfcomm0` in the example below):
+    - In the RPi command prompt you should see should it connect on a  bluetooth serial port (`/dev/rfcomm0` in the example below):
     ```
     pi@raspberrypi:~ $ sudo rfcomm watch hci0
     Waiting for connection on channel 1
@@ -336,10 +352,12 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
     Press CTRL-C for hangup
     ```
    
-2. Now we can run RTKLIB str2str in a separate command console to route the incoming NTRIP to the F9P (in the case below, via the second hardware serial port that has been enabled on the GPIO bus).
+2. Now we can run RTKLIB str2str in a separate command console on the RPi to route the incoming NTRIP to the F9P (in the case below, via the second hardware serial port that has been enabled on the GPIO bus; see details below).
     ```
     ./str2str -in serial://rfcomm0:115200:8:n:1 -out ./rtcm.txt -out serial://ttyAMA1:115200:8:n:1
     ```
+
+At this point corrections some be read by the phone, sent via bluetooth to the RPi and then sent via serial to the gps receiver.  The receiver should go into float (blinking LED) and then fixed (LED off) mode.
 
 ## The Hardware: An Unexpected Journey
 
@@ -350,39 +368,43 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
 
 The plan at the start was to stream the RTCM3 corrections from the RaspberryPi or Jetson Nano's default GPIO serial port to the ZED-F9P's corrections port (F9P UART2).  So the first thing that was needed was to solder the headers to the F9P so we can make physical connections using dupont jumper wires.  I'm not going to go into that; there are a lot of videos on YouTube on how to solder headers and what you need to do it.  My only suggestion is to practice a LOT before you try to solder headers to your $300 gps board.  And have some flux ready.
 
-Once that is done the wiring was connected from the computer's default GPIO serial port on board pins 8&10 to the corrections serial port on the F9P.  By default the ZED-F9P corrections port is configured to read RTCM3.  The reason I started this way was because 'default' is a good word.  Look at all those defaults.  Nice. Or so I thought.
+Once gps headers are soldered then dupont jumper wires were connected from the computer's _default_ GPIO serial port on board pins 8&10 to the corrections serial port on the F9P.  By _default_ the ZED-F9P corrections port is configured to read RTCM3.  The reason I started this way was because 'default' is a good word.  Look at all those _defaults_.  Nice. Or so I thought.
 
-Wiring Connections
-- F9P-UART2 is the corrections port on the Sparkfun GPS-RTK-SMA Breakout ZED-F9P
-  - This port is setup to input UBX, NMEA and RCTM3
-  - This port is setup to output RCTM3
-- F9P-USB port
-  - This port is setup to input and output UBX, NMEA and RTCM3
+***Wiring Connections***
+We connect dupont jumper where been the F9P corrections port and the RPi/Nano default gpio port.
 
-GPIO on the 40 GPIO bus on the SBC (RaspberryPi or Jetson Nano)
+The F9P corrections port:
+- TX2 is serial transmit
+- RX2 is serial receive
+- GND is ground
+
+<br>
+The 40 GPIO bus on the RaspberryPi or Jetson Nano:
 - Board pin 6 is GND
 - Board pin 8 is TX for uart2
   - On the Jetson Nano the default spio serial port is `/dev/ttyTHS1`.
   - On the RaspberryPi 4 the default gpio serial port is  `/dev/ttyAMA1`.
 - Board pin 10 is RX for uart2
 
+<br>
+After those are connected, then connect the RPi/Nano and ZED-F9P via a USB cable.  So our fully connected setup looks like this:
 
 ```
 RPi/Nano            ZED-FP9   
 -----------------------------
 Pin-6        <--->  GND
-Pin-8, TXD   <--->  UART2-RX
-Pin-10, RXD  <--->  UART2-TX
+Pin-8, TXD   <--->  RX2
+Pin-10, RXD  <--->  RX2
 USB          <--->  USB
 ```
 
-Software setup (TLDR version)
-- Use u-center to set the FP9 UART-2 to 115200 baud
+***Software setup (TLDR version)***
+- Use U-Center to set the FP9 UART-2 to 115200 baud
 - Set the RPi/Jetson Nano serial port to 115200 baud
     ```
     sudo stty -F /dev/ttyTHS1 115200
     ```
-- Run str2str on the RPi to get corrections from UNAVCO or your NTRIP server and send them from the default gpio serial port to to the FP9 corrections port.
+- Run str2str on the RPi to get corrections from UNAVCO or your NTRIP server and send them from the default gpio serial port to the FP9 corrections port.
     ```
     ./str2str -in ntrip://USERNAME:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyTHS1:115200:8:n:1
     ```
@@ -394,22 +416,15 @@ The bad news is that with this setup I never get to float mode on the ZED-F9P us
 So the bad news is that sending RTCM3 corrections from the RPi or Nano using the default gpio serial port does not seem to work. There is no error message from `str2str`; we just never get to float (and so never to fixed). But there is some good news; there is a simple work around.  Even better, there is a difficult work around (see [Where art UART oh RPi?](#here_art_uart_oh_rpi)).  The easy work around should be obvious to the most casual observer (or to me after several days of trying to make the GPIO serial work); don't try to send RTCM correction over the gpio serial; instead send them over the USB serial. Stupid. Simple. I got to 'fixed' on the Jetson Nano by streaming RTCM3 over the USB serial port.  Reading the NMEA from the GPIO serial port works fine, so we are set there.  Even better news, in 100 samples I got a range of 2.5 cm.  Notice the 'c' before that 'm'.  If it ain't broken, it's fixed and fixed is good.
 
 
-This the `str2str` command that worked (note that I have increased the baud rate of the ZED-F9P corrections port to 115200 baud using U-Center, more on that later); it gets the corrections from and NTRIP server over the internet and then sends then to the ZED-F9P via USB serial.
+This the `str2str` command that worked; it gets the corrections from and NTRIP server over the internet and then sends then to the ZED-F9P via USB serial.
 ```
 ./str2str -in ntrip://USERNAME:PASSWORD@rtgpsout.unavco.org:2101/P200_RTCM3 -out serial://ttyACM0:115200:8:n:1
 ```
-- Read NMEA messages from the GPIO serial port (`/dev/ttyTHS1` on Nano or `/dev/ttyAMA0` on the RPi) connected to the ZED-F9P corrections port.
-  - On the Jetson Nano, remember to stop the `nvgetty` login service does it does interfere with the serial port.
-
-So this is good if I am reading corrections over the internet; I can read them from the internet and send them to the ZED-F9P via USB serial, then I can read the super awesome accurate NMEA sentences using the gpio serial port.  However, in the field (like at a race track) I will not always be getting RTCM3 corrections over the internet; I might not have fixed internet.  I may have access to a local base station which means I will need a radio, like a LoRa radio, attached to a ZED-F9P serial port to receive corrections from the local base station.  It is common to connect the radio directly to the corrections serial port on the ZED-F9P, in which case I would not even need to send corrections from the Jetson Nano; I would get them directly from the radio.  That would allow me to read NMEA via USB.
-
-However, if I am in a place where I want to use an NTRIP server, but I don't have good fixed internet, then I will need another option.  There are a few I could use;
-- Use an Android NTRIP client on my phone. pair my phone with the RaspberryPi or Jetson Nano via Bluetooth.  The Android NTRIP client receive the corrections over the mobile internet and then sends the corrections to the RPi/Nano over bluetooth serial.  Then we can forward the corrections, using str2str running on the RPi/Nano, over the USB serial to the ZED-F9P.  The RPi/Nano can read NMEA using the GPIO serial connected to the ZED-F9P corrections port.
-- We could get real hacky and tape our phone to the Donkeycar (or maybe put it in an pouch or envelope and tape that to the car; that might be better for your phone).  Turn on the phone's mobile hotspot (a word to the wise; do that before you tape it to the car), have the RPi/Nano connect to it via Wi-Fi, then stream corrections from you favorite NTRIP server via the mobile internet.  Beyond the hotspot setup all the software setup and hardware connections are the same as if streaming directly over fixed Wi-Fi.
+- Since we are sending the corrections via the serial port, then we need to read the NMEA sentences on a different port.  We can read NMEA messages from the GPIO serial port (`/dev/ttyTHS1` on Nano or `/dev/ttyAMA0` on the RPi) connected to the ZED-F9P corrections port that we setup earlier. 
 
 
 ### Where art thine UART oh RPi? 
-As previously discussed ad nauseum, I have found that UART on the GPIO bus (gpio 14&15 exposed on board pins 8&10 respectively) to be unreliable; it is not based on a hardware UART and so is more prone to issues at higher speeds.  That bugged me, so even though I found a work around, I wanted to fix it.  I have not found a fix on the Jetson Nano, but it can be fixed on the RaspberryPi 4 (but not 3 or below; sorry).  By default the RPi uses two UARTs; one for the bluetooth functionality and one for the GPIO serial port.  The Bluetooth UART uses underlying hardware and so can handle very high baud rates with hardware handshaking.  The UART exposed on the GPIO bus is less capable.  Luckily the RPi 4 actually has 6 hardware-based UARTS. We can expose these by using device-tree overlays.  The device tree is data that is loaded at boot time that tells Linux which devices are attached and so which drivers to load.  A device tree overlay (dtoverlay) is a way of adding to the device tree without having to create a whole new one.  RaspberryPi OS has a bunch of available dtoverlays that can be used to turn on optional features.  We can list the ones that have to do with UARTs (see this RPi [forum](https://forums.raspberrypi.com/viewtopic.php?t=244827) discussion)
+As previously discussed ad nauseum, I have found that UART on the GPIO bus (gpio 14&15 exposed on board pins 8&10 respectively) to be unreliable; it is not based on a hardware UART and so it is more prone to issues at higher speeds.  That bugged me, so even though I found a work around, I wanted to fix it.  I have not found a fix on the Jetson Nano, but it can be fixed on the RaspberryPi 4 (but not RPi 3 or below; sorry).  By default the RPi uses two UARTs; one for the bluetooth functionality and one for the GPIO serial port.  The Bluetooth UART uses underlying hardware and so can handle very high baud rates with hardware handshaking.  The UART exposed on the GPIO bus is less capable.  Luckily the RPi 4 actually has 6 hardware-based UARTS. We can expose these by using device-tree overlays.  The device tree is data that is loaded at boot time that tells Linux which devices are attached and so which drivers to load.  A device tree overlay (dtoverlay) is a way of adding to the device tree without having to create a whole new one.  RaspberryPi OS has a bunch of available dtoverlays that can be used to turn on optional features.  We can list the ones that have to do with UARTs (see this RPi [forum](https://forums.raspberrypi.com/viewtopic.php?t=244827) discussion)
 
 ```
 $ dtoverlay -a | grep uart
@@ -425,7 +440,7 @@ $ dtoverlay -a | grep uart
 ```
 
 
-Add this in the `/boot/config.txt` in the `[pi4]` section (you will need to `sudo`) to enable uart3 using defaults, then reboot.
+It so happens that the `uart3` will enable a hardware uart on a couple of gpio pins that we are not already using. To to enable uart3 on the gpio bus, add this to the `/boot/config.txt` file, in the `[pi4]` section (you will need to `sudo`), then reboot.
 ```
 # Enable UART3 on gpio 4=tx & 5=rx, no flow control pins
 dtoverlay=uart3
@@ -433,7 +448,7 @@ dtoverlay=uart3
 
 Once that is done, then the serial device /dev/ttyAMA1 can be used to control the UART exposed on gpio 4&5, which are exposed on the 40 pin bus on board pin 7 and board pin 29 respectively.
 
-Connections when using the RaspberryPi UART3
+Connections when using the RaspberryPi4 UART3
 
 ```
 RPi            <--->  FP9   
