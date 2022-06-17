@@ -282,12 +282,14 @@ For both the RaspberryPi and the Jetson Nano there are 3 pins that we will want 
 Note that we do NOT connect any positive voltage.  There is no need; the F9P board will be powered when it is connection to the USB port, so we do not need to power it through the serial pins.  If your gps receiver does not have a USB port, you will need to power via the VCC pin; most chipsets use 3.3v and NOT 5v, so make sure your USB to UART adapter can be set to use 3.3v.
 
 ### Lefebure NTRIP Client for Android
-Lefebure offers a free NTRIP client and NMEA data logger for Android. With the Android NTRIP client, your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth.  The gps receiver can get the corrections in one of two ways.
-- If the receiver has a bluetooth radio connected to its serial port, then the phone would be paired to that radio and the corrections would go directly from the phone to the gps receiver via the bluetooth radio.
-- If the receiver is connected to a RaspberryPi or Jetson Nano, then the RPi/Nano would pair to the phone and the corrections would go from the phone to the RPi/Nano via bluetooth.  The RPI/Nano would then forward to the gps receiver using RTKLIB and str2str as previously explained.  
-
+Lefebure offers a free NTRIP client and NMEA data logger for Android. 
 - [Lefebure](http://lefebure.com/software/android-ntripclient/) 
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lefebure.ntripclient)
+
+<br>
+With the Android NTRIP client, your phone connects to the NTRIP server and then sends the RTCM corrections via a Bluetooth.  The gps receiver can get the corrections in one of two ways.
+- If the receiver has a bluetooth radio connected to its serial port, then the phone would be paired to that radio and the corrections would go directly from the phone to the gps receiver via the bluetooth radio.
+- If the receiver is connected to a RaspberryPi or Jetson Nano, then the RPi/Nano would pair to the phone and the corrections would go from the phone to the RPi/Nano via bluetooth.  The RPI/Nano would then forward to the gps receiver using RTKLIB and str2str as previously explained.  
 
 
 #### Configure Android NTRIP Client
@@ -302,6 +304,7 @@ Lefebure offers a free NTRIP client and NMEA data logger for Android. With the A
         ```
     - See how it resolved `rtgpsout.unavco.org` to the ip address `69.44.86.36`. 
 
+<br>
 Once you setup the NTRIP caster, you can connect in 'test' mode (no receiver) to see if the client will connect and that you can read corrections.  Once you know you are getting corrections, then yo can configure a receiver that will get them.
 
 - Configure the receiver settings.  You may need to do this _after_ pairing the RaspberryPi and the phone (steps 1, 2 and 3 below) so that the raspberrypi device can be selected in the `Bluetooth Device` field.
@@ -309,6 +312,7 @@ Once you setup the NTRIP caster, you can connect in 'test' mode (no receiver) to
     - `Bluetooth Device` should be `raspberrypi' (or whatever the nano device is named if using a nano)
     - Leave the other fields to the defaults.
 
+<br>
 With both the NTRIP caster and the receiver configured, you can `Connect'.  It should connect to the ntrip server and then transmit the corrections to the receiver.
 
 #### Pair RPi/Nano and Phone over Bluetooth
@@ -357,7 +361,7 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
     ./str2str -in serial://rfcomm0:115200:8:n:1 -out ./rtcm.txt -out serial://ttyAMA1:115200:8:n:1
     ```
 
-At this point corrections some be read by the phone, sent via bluetooth to the RPi and then sent via serial to the gps receiver.  The receiver should go into float (blinking LED) and then fixed (LED off) mode.
+At this point corrections will be read by the phone, then sent via bluetooth to the RPi and then sent via serial to the gps receiver.  The receiver should go into float (blinking LED) and then fixed (LED off) mode.
 
 ## The Hardware: An Unexpected Journey
 
@@ -410,7 +414,7 @@ USB          <--->  USB
     ```
 - Read NMEA messages on USB serial port, /dev/ttyACM0
 
-
+<br>
 The bad news is that with this setup I never get to float mode on the ZED-F9P using either the RaspberryPi or the Jetson Nano; the `RTK` LED on the Sparkfun ZED-F9P stayed solidly lit.  Let me explain (isn't that what this whole article is for?); the ZED-F9P goes through stages as it develops a more accurate position estimate.  This is indicated by an LED on the Sparkfun ZED-F9P board labeled `RTK`.  When it is solid it is not using any corrections and so the position estimate is at its least accurate.  When it starts using corrections, but before most of its satellites are corrected, it is in 'float' mode.  In this mode the `RTK` LED blinks.  Float mode is more accurate, but more importantly it indicates that RTCM3 corrections data is getting to the ZED-F9P.  If you have a good view of the sky and you never get to float mode then it probably means the RTCM3 corrections are not getting to the gps board correctly.  Of course if you are in your basement then it doesn't matter if the corrections make it to the board; you can't see any satellites!  If you get to float mode then the next stage you are hoping for is 'fixed' mode.  In this mode the F9P can apply corrections to most of the satellites it can see and so its position estimate is optimal.  In 'fixed' mode the `RTK` LED goes off.  So, if the `RTK` is solidly lit, then things are _not_ working.
 
 So the bad news is that sending RTCM3 corrections from the RPi or Nano using the default gpio serial port does not seem to work. There is no error message from `str2str`; we just never get to float (and so never to fixed). But there is some good news; there is a simple work around.  Even better, there is a difficult work around (see [Where art UART oh RPi?](#here_art_uart_oh_rpi)).  The easy work around should be obvious to the most casual observer (or to me after several days of trying to make the GPIO serial work); don't try to send RTCM correction over the gpio serial; instead send them over the USB serial. Stupid. Simple. I got to 'fixed' on the Jetson Nano by streaming RTCM3 over the USB serial port.  Reading the NMEA from the GPIO serial port works fine, so we are set there.  Even better news, in 100 samples I got a range of 2.5 cm.  Notice the 'c' before that 'm'.  If it ain't broken, it's fixed and fixed is good.
