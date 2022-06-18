@@ -473,6 +473,6 @@ USB            <--->  USB
 ArduSimple makes gps boards and has excellent content.  
 - https://www.ardusimple.com/rtk-explained/
 
-
+<br>
 Sparkfun makes lots of great stuff, including gps boards.  They are known for their excellent content explaining how to use their products.
 - https://learn.sparkfun.com/tutorials/what-is-gps-rtk
