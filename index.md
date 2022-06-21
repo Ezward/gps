@@ -363,6 +363,37 @@ Send corrections from the Android NTRIP client to the RaspberryPi or the Jetson 
 
 At this point corrections will be read by the phone, then sent via bluetooth to the RPi and then sent via serial to the gps receiver.  The receiver should go into float (blinking LED) and then fixed (LED off) mode.
 
+### DonkeyCar
+[DonkeyCar](https://www.donkeycar.com) is the open source framework I use for racing autonomous RC cars.  I'm also a maintainer on the project.  I list it here because I wrote a [gps driver](https://github.com/autorope/donkeycar/blob/921-path-follow-in-simulator/donkeycar/parts/gps.py) for it (a 'part' in DonkeyCar parlance) that reads NMEA sentences from a gps receiver and parses out the position.  It's very rudimentary at the moment; [GpsPosition](https://github.com/autorope/donkeycar/blob/050009fbf09675e5034bbe04763187ca234528db/donkeycar/parts/gps.py#L18) simply provides the most recent position in UTM units (effectively the position on Earth in meters rather than in latitude and longitude).  GpsPosition actually uses the [Gps](https://github.com/autorope/donkeycar/blob/050009fbf09675e5034bbe04763187ca234528db/donkeycar/parts/gps.py#L48) class underneath, which is a gps datalogger that returns all the positions (and their timestamps) recorded since the last call.  As I need more it will get better.  For instance, I know I'll want to start returning the vehicle's heading as measured by the receiver.  I may also want to get measures of the quality of the position estimate.
+
+The important part for this discussion is the [`__main__`](https://github.com/autorope/donkeycar/blob/050009fbf09675e5034bbe04763187ca234528db/donkeycar/parts/gps.py#L343); it provides a command line utility that can be used to log positions and record waypoints.  
+
+- [Install DonkeyCar](https://docs.donkeycar.com/guide/install_software/#step-2-install-software-on-donkeycar) on your RaspberryPi or Jetson Nano
+- Make sure you are in the donkeycar project folder (where you cloned the code).
+- Activate the donkeycar python environment if it is not already; `source ~/env/bin/activate`
+- Run the gps part in logging mode.
+  - The `<serialport>` value differs depending on how you have your gps receiver connected (by usb or gpio serial) and by SBC (RPi vs Nano)
+    - You can list all potential serial ports; `ls /dev/tty*`.  Note that most of these are actually not usable.
+    - If connecting to the Nano USB port, use `/dev/ttyUSB0`
+    - If connecting to the RPi USB port, use `/dev/ttyACM01`
+    - If connecting to the default RPi gpio serial port (board pins 8&10) use `/dev/ttyAMA0`
+  - The `<baudrate>` value differs depending on your gps and if you have changed it using U-Center.  
+    - when connecting between the SBC's USB port and the usb port on the gps receiver the baud rate is detected by USB, so choose 115200 so you have a fast connection.
+    - The ZED-F9P's other serial ports default to 38400 baud.
+    - Cheap gps receivers generally default to 9600 baud.  
+```
+python donkeycar/parts/gps.py -s=<serialport> -b=<baudrate>
+```
+
+- You can also collect waypoints and then the logging will indicate which waypoint your are within as you move around.
+  - after executing the following command, the software will wait for you to press the space bar before collecting the samples for each waypoint.
+```
+python donkeycar/parts/gps.py -s=<serialport> -b=<baudrate> -wp=<number of waypoints> -sp=<samples per waypoint>
+```
+- If you are running the Linux Desktop on the RPi/Nano (as opposed to ssh), then you can also add the `-db` argument.  That will tell the software to render the waypoints and show them in a window.  That only works if you are running the linux GUI; you can't do that from an ssh session because it can't show you the graphic window.
+
+Feel free to leave an issue in the [DonkeyCar github](https://github.com/autorope/donkeycar) repo if you find a bug or want to suggest and improvement.
+
 ## The Hardware: An Unexpected Journey
 
 <p></p>
