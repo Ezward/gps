@@ -374,9 +374,10 @@ The important part for this discussion is the [`__main__`](https://github.com/au
 - Run the gps part in logging mode.
   - The `<serialport>` value differs depending on how you have your gps receiver connected (by usb or gpio serial) and by SBC (RPi vs Nano)
     - You can list all potential serial ports; `ls /dev/tty*`.  Note that most of these are actually not usable.
-    - If connecting to the Nano USB port, use `/dev/ttyUSB0`
-    - If connecting to the RPi USB port, use `/dev/ttyACM01`
-    - If connecting to the default RPi gpio serial port (board pins 8&10) use `/dev/ttyAMA0`
+    - If connecting to the Nano USB port, use `/dev/ttyUSB0`.
+    - If connecting to the RPi USB port, use `/dev/ttyACM01`.
+    - If connecting to the default RPi gpio serial port (board pins 8&10) use `/dev/ttyAMA0`.
+    - If connecting to the default Jetson Nano gpio serial port (board pins 8&10) use `/dev/ttyTHS1`.
   - The `<baudrate>` value differs depending on your gps and if you have changed it using U-Center.  
     - when connecting between the SBC's USB port and the usb port on the gps receiver the baud rate is detected by USB, so choose 115200 so you have a fast connection.
     - The ZED-F9P's other serial ports default to 38400 baud.
