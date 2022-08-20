@@ -498,6 +498,20 @@ USB            <--->  USB
   <a href="https://learn.sparkfun.com/tutorials/introduction-to-the-raspberry-pi-gpio-and-physical-computing/gpio-pins-overview">RaspberryPi GPIO</a>
 </p>
 
+## Um, does this !@#$% actually work?
+I'm shocked you had to ask.  After months of work I finally got a gps auto-pilot running in the [Donkeycar](https://www.donkeycar.com) framework.  I got it working 2 days before the July [Diyrobocars](https://diyrobocars.com) race.  That turned out to be an interesting set of races.  We had about 7 competitors show up, of which 4 got their cars to run.  One the 4 runners crashed out during a warm-up lap, so we ended up with 3 competitors.  They ran 3 different software stacks; all based on great open source projects.  One was an [F1Tenth](https://f1tenth.org) based car running [ROS](https://www.ros.org).  Another was based on [Ardurover](https://ardupilot.org/rover/) software running on a [Pixhawk](https://pixhawk.org/) controller.  My entry was running a [Donkeycar branch](https://github.com/autorope/donkeycar/tree/921-gps-logger) on a [RaspberryPi 4B](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
+
+The race was epic. It was everything you want from motorsports; passing, crashing and winning.  The Donkeycar entry ended up in second place after being wiped out by the winner; the superfast (and large) ROS entry.  Notice how the Donkeycar recovers after being completely turned around in the crash.
+
+<p align="center">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/tjWmrCIKgnE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+
+Now that Donkeycar has the ability to race outside I hope that we will see a lot more competitors in our future races.
+
+#### Status of the Donkeycar branch
+I'm working on getting this branch into the [main Donkeycar branch](https://github.com/autorope/donkeycar).  There are a lot of changes, so I'm doing this over a few pull requests.  You can use the [921-gps-logger](https://github.com/autorope/donkeycar/tree/921-gps-logger) branch until that work is complete; you will know it is done when the 921-gps-logger branch no longer exists!
+
 
 ## Thanks, but is there someone around here that knows anything?
 ArduSimple makes gps boards and has excellent content.  
