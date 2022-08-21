@@ -503,9 +503,9 @@ I'm shocked you had to ask.  After months of work I finally got a gps auto-pilot
 
 The race was epic. It was everything you want from motorsports; passing, crashing and winning.  The Donkeycar entry ended up in second place after being wiped out by the winner; the superfast (and large) ROS entry.  Notice how the Donkeycar recovers after being completely turned around in the crash.
 
-<p align="center">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/tjWmrCIKgnE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</p>
+<div class="video-container">
+    <iframe class="video" src="https://www.youtube.com/embed/tjWmrCIKgnE" allowfullscreen></iframe>
+</div>
 
 Now that Donkeycar has the ability to race outside I hope that we will see a lot more competitors in our future races.
 
