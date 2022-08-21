@@ -505,7 +505,7 @@ The race was epic. It was everything you want from motorsports; passing, crashin
 
 <div class="video-container">
     <iframe class="video" src="https://www.youtube.com/embed/tjWmrCIKgnE" allowfullscreen></iframe>
-</div>
+  </div><br/>
 
 Now that Donkeycar has the ability to race outside I hope that we will see a lot more competitors in our future races.
 
