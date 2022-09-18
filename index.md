@@ -1,13 +1,19 @@
 ## Donkeycar meets RTK GPS
 
-I want to race RC cars.  I don't want to actually drive them.  I'd probably suck at it.  I'm really pretty sure about that.  So they have to drive themselves.  There are a bunch a ways to get an RC to drive itself.  When you are outside gps is a good choice, but it has to be the right kind of gps and it must be setup the right way.  You also need software to read and interpret the data sent by the gps.  My automonous RC car uses the [DonkeyCar](https://www.donkeycar.com/) framework for small scale car racing, so I'm adding gps support to that framework.  An autonomous car also needs a computer to run the software.  DonkeyCar supports the Raspberry Pi or the Nvidia Jetson Nano as the brains of the car.  I've tried both, but one worked better than the other for this purpose.  More after this commercial break...
+I want to race RC cars.  I don't want to actually drive them.  I'd probably suck at it.  I'm really pretty sure about that.  So they have to drive themselves.  There are a bunch a ways to get an RC to drive itself.  When you are outside gps is a good choice, but it has to be the right kind of gps and it must be setup the right way.  You also need software to read and interpret the data sent by the gps.  My automonous RC car uses the [DonkeyCar](https://www.donkeycar.com/) framework for small scale car racing, so I'm adding gps support to that framework.  An autonomous car also needs a computer to run the software.  DonkeyCar supports the Raspberry Pi or the Nvidia Jetson Nano as the brains of the car.  I've tried both, but It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
 
 <p align="center">
   <img src="img/donkeycar.png" style="height: 75%; width: 75%;" alt="A DonkeyCar" style="display:block;"/>
   A <a href="https://www.donkeycar.com/">DonkeyCar</a>
 </p>
 
-Just kidding, no one would sponsor me.  It turns out that the Raspberry Pi works a little better, but either can work.  I'll talk about both.
+**Camera, We Don't Need No Stinking Camera**
+The original DonkeyCar approach of using a single camera and a neural network for auto-pilot works really well, especially indoors where lighting conditions can be controlled.  It is more difficult to use outdoors because lighting conditions change dramatically from day to day and even over a single day as shadows or clouds evolve.  But outside under the vast blue sky (ooh, pretty) we have access to something we don't have inside - GPS Satellites.
+
+<p align="center">
+  <img src="img/donkeycar_gps_side.png" style="height: 75%; width: 75%;" alt="A GPS DonkeyCar" style="display:block;"/>
+  A <a href="https://www.donkeycar.com/">A GPS DonkeyCar</a>
+</p>
 
 ### Send in the Satellites
 First lets talk about gps satellites.  The term GPS (Global Positioning System) is commonly used to refer to satellite positioning systems generally, but technically it refers to the to American system of positioning satellites provided as a service of the United States government.  Other systems have been added (generally also by governments).  The Russian government provides the GLONASS system; China provides the BeiDou system and the European Union provides the Galileo system.  There are other smaller regional systems, some based on a combination of satellites and land based installations.  Collectively these are often referred to as the Global Navigation Satellite Systems (GNSS) system.  The more the merrier; literally, if you get happy about coverage, accuracy and speed.  In this discussion I'll use lower case gps or GNSS to refer to these systems collectively and upper case GPS to refer specifically to the American system.
@@ -117,7 +123,7 @@ Ok, this is the section (maybe sections) where I'll give detailed instructions o
   DonkeyCar with Sparkfun RTK GPS
 </p>
 
-So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi connected to a Sparkfun ZED-F9P RTK GPS board via USB and GPIO serial.  In this case it is using an extra hardware backed UART (uart3) mapped to pins on the gpio bus.  This was required for reasons explained later.  So in this setup we want to get corrections into the RaspberryPi, either using RTKLIB or via an Android NTRIP client, and then send them via a serial port to the ZED-F9P. The following sections describe how to setup the software to do that.
+So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi connected to a Sparkfun ZED-F9P RTK GPS board via USB and GPIO serial.  In this case it is using an extra hardware backed UART (uart3) mapped to pins on the gpio bus.  This was required for reasons explained later.  So in this setup we want to get corrections into the RaspberryPi, either using RTKLIB or via an Android NTRIP client, and then send them via a serial port to the ZED-F9P. We then use a second serial port to read (the now much more accurate) NMEA sentences.  The following sections describe how to setup the software to do that.
 
 ### U-Center
 You will want to do 4 things with U-Center to get your gps module setup.  
