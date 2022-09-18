@@ -7,12 +7,12 @@ I want to race RC cars.  I don't want to actually drive them.  I'd probably suck
   A <a href="https://www.donkeycar.com/">DonkeyCar</a>
 </p>
 
-**Camera, We Don't Need No Stinking Camera**
+### Camera, We Don't Need No Stinking Camera
 The original DonkeyCar approach of using a single camera and a neural network for auto-pilot works really well, especially indoors where lighting conditions can be controlled.  It is more difficult to use outdoors because lighting conditions change dramatically from day to day and even over a single day as shadows or clouds evolve.  But outside under the vast blue sky (ooh, pretty) we have access to something we don't have inside - GPS Satellites.
 
 <p align="center">
-  <img src="img/donkeycar_gps_side.png" style="height: 75%; width: 75%;" alt="A GPS DonkeyCar" style="display:block;"/>
-  A <a href="https://www.donkeycar.com/">A GPS DonkeyCar</a>
+  <img src="img/donkeycar_gps_side.jpg" style="height: 75%; width: 75%;" alt="A GPS DonkeyCar" style="display:block;"/>
+  A GPS <a href="https://www.donkeycar.com/">DonkeyCar</a>
 </p>
 
 ### Send in the Satellites
