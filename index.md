@@ -25,8 +25,8 @@ Next, let's talk about the kinds of gps receiver devices available for talking t
 Other companies produce ZED-F9P based boards.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the antenna and still costs a little less than the SparkFun board without the antenna.
 
 <p align="center">
-  <img src="https://www.mouser.com/images/ardusimple/hd/AS-STARTKIT-BASIC-L1L2-NH-02_SPL.jpg" style="height: 75%; width: 75%; display: block;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
-  <a href="https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a>
+  <img src="https://www.ardusimple.com/wp-content/uploads/2018/08/basic-kit-upgraded.png" style="height: 75%; width: 75%; display: block;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
+  <a href="https://www.ardusimple.com/product/simplertk2b-basic-starter-kit-ip65/">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a>
 </p>
 
 What is it with these product names?  Anyway, U-Blox isn't the only game in town; you can find inexpensive GPS modules that use other chipsets, often from China.  In many ways these can work interchangeably with U-Blox based boards because they all support the a standard way of reading data from the satellites, call NMEA sentences.  This is a line-oriented text protocol.  So if your software can parse NMEA sentences then it can work with most gps modules.  
