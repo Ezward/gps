@@ -7,7 +7,7 @@ I want to race RC cars.  I don't want to actually drive them.  I'd probably suck
   A <a href="https://www.donkeycar.com/">DonkeyCar</a>
 </p>
 
-### Camera, We Don't Need No Stinking Camera
+### We Don't Need No Stinking Camera
 The original DonkeyCar approach of using a single camera and a neural network for auto-pilot works really well, especially indoors where lighting conditions can be controlled.  It is more difficult to use outdoors because lighting conditions change dramatically from day to day and even over a single day as shadows or clouds evolve.  But outside under the vast blue sky (ooh, pretty) we have access to something we don't have inside - GPS Satellites.
 
 <p align="center">
@@ -16,7 +16,7 @@ The original DonkeyCar approach of using a single camera and a neural network fo
 </p>
 
 ### Send in the Satellites
-First lets talk about gps satellites.  The term GPS (Global Positioning System) is commonly used to refer to satellite positioning systems generally, but technically it refers to the to American system of positioning satellites provided as a service of the United States government.  Other systems have been added (generally also by governments).  The Russian government provides the GLONASS system; China provides the BeiDou system and the European Union provides the Galileo system.  There are other smaller regional systems, some based on a combination of satellites and land based installations.  Collectively these are often referred to as the Global Navigation Satellite Systems (GNSS) system.  The more the merrier; literally, if you get happy about coverage, accuracy and speed.  In this discussion I'll use lower case gps or GNSS to refer to these systems collectively and upper case GPS to refer specifically to the American system.
+Lets talk about gps satellites.  The term GPS (Global Positioning System) is commonly used to refer to satellite positioning systems generally, but technically it refers to the to American system of positioning satellites provided as a service of the United States government.  Other systems have been added (generally also by governments).  The Russian government provides the GLONASS system; China provides the BeiDou system and the European Union provides the Galileo system.  There are other smaller regional systems, some based on a combination of satellites and land based installations.  Collectively these are often referred to as the Global Navigation Satellite Systems (GNSS) system.  The more the merrier; literally, if you get happy about coverage, accuracy and speed.  In this discussion I'll use lower case gps or GNSS to refer to these systems collectively and upper case GPS to refer specifically to the American system.
 
 So the gps receiver (more below) gets radio signals from the gps satellites.  Each satellite is transmitting a very exact time and it's current position in space.  When the gps receiver gets a time and satellite position, it calculates how long it took the signal to reach the receiver and can then calculate the distance to the satellite.  With 3 satellites the receiver can triangulate it's position on the surface of the Earth.  The reality is a little more complicated because the receiver uses many satellites and the Earth is not flat (glad I got that off my mind), but you get the idea.
 
