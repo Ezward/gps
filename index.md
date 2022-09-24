@@ -129,35 +129,37 @@ So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi con
 You will want to do 4 things with U-Center to get your gps module setup.  
 
 1. Install U-Center
-- Windows Installation
-    - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
-    - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
-        - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
-- MacOS/Linux Installation
-    - Download and install [XQuartz](https://www.xquartz.org/index.html) 
-    - Download and install [PlayOnMac](https://www.playonmac.com/en/download.html) Windows emulation
-    - Download [U-Center installer](https://www.u-blox.com/en/product/u-center) for F9P, then double-click on it to install into PlayOnMac.
-    - Start PlayOnMac if it is not already started, then create a U-Center configuration.
-    - Map your Mac's serial device to a COM port in PlayOnMac
-        - Determine serial port’s device path.
-             - sometimes it is easier to do this in two steps.  (1) Before you plug-in your GPS receiver into the USB port, list the tty devices `ls /dev/tty*` (2) Plug your GPS receiver into the USB port and list the tty devices again.  The new tty device is your USB port.  Take note of the path.  Mine was `/dev/tty.usbmodem14101`.
 
-        - Create a symbolic link to the device in the PlayOnMac U-Center configuration `dosdevices` folder.  The folder was at `~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices` on my machine.  To create the symbolic link from the device to `com1` execute this command line in a console: 
-          ```
-          ln -s /dev/tty.usbmodem14101 ~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices/com1
-          ```
+    - Windows Installation
+        - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
+        - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
+            - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
 
-        - Update the system registry in the PlayOnMac U-Center to include the com port.  
-            - Open the system registry file in a text editor (use a code editor and not a word processor).  My system registry file was at `~/Library/PlayOnMac/wineprefix/U_Center_/system.reg`.  
-            - Find the section `[Software\\Wine\\Ports]` and add the line `"com1"="/dev/tty.usbmodem14101”`, using the com port and device path you used in the symbolic link.  Mine section ended up looking like this;
-            ```
-            [Software\\Wine\\Ports] 1663982657
-            #time=1d8cfb45d70ce78
-            "com1"="/dev/tty.usbmodem14101"
-            ```
-        - Save the file.  Now when you run U-Center from within PlayOnMac you should have `com1` available in the `Receiver/Connection` menu.
-        - Here is a video that shows this procedure [Running U-Center on MacOS](https://youtu.be/IHblD8iwjmA)
-        - That procedure was adapted from the standard Wine procedure shown in this [video](https://www.youtube.com/watch?v=41enNl9Vsig)
+    - MacOS/Linux Installation
+        - Download and install [XQuartz](https://www.xquartz.org/index.html) 
+        - Download and install [PlayOnMac](https://www.playonmac.com/en/download.html) Windows emulation
+        - Download [U-Center installer](https://www.u-blox.com/en/product/u-center) for F9P, then double-click on it to install into PlayOnMac.
+        - Start PlayOnMac if it is not already started, then create a U-Center configuration.
+        - Map your Mac's serial device to a COM port in PlayOnMac
+            - Determine serial port’s device path.
+                - sometimes it is easier to do this in two steps.  (1) Before you plug-in your GPS receiver into the USB port, list the tty devices `ls /dev/tty*` (2) Plug your GPS receiver into the USB port and list the tty devices again.  The new tty device is your USB port.  Take note of the path.  Mine was `/dev/tty.usbmodem14101`.
+
+            - Create a symbolic link to the device in the PlayOnMac U-Center configuration `dosdevices` folder.  The folder was at `~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices` on my machine.  To create the symbolic link from the device to `com1` execute this command line in a console: 
+           ```
+           ln -s /dev/tty.usbmodem14101 ~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices/com1
+           ```
+
+            - Update the system registry in the PlayOnMac U-Center to include the com port.  
+                - Open the system registry file in a text editor (use a code editor and not a word processor).  My system registry file was at `~/Library/PlayOnMac/wineprefix/U_Center_/system.reg`.  
+                - Find the section `[Software\\Wine\\Ports]` and add the line `"com1"="/dev/tty.usbmodem14101”`, using the com port and device path you used in the symbolic link.  Mine section ended up looking like this;
+                ```
+                [Software\\Wine\\Ports] 1663982657
+                #time=1d8cfb45d70ce78
+                "com1"="/dev/tty.usbmodem14101"
+                ```
+            - Save the file.  Now when you run U-Center from within PlayOnMac you should have `com1` available in the `Receiver/Connection` menu.
+            - Here is a video that shows this procedure [Running U-Center on MacOS](https://youtu.be/IHblD8iwjmA)
+            - That procedure was adapted from the standard Wine procedure shown in this [video](https://www.youtube.com/watch?v=41enNl9Vsig)
 
 2. Launch U-Center and connect to the gps receiver.
     - Open the `Receiver` menu, then the `Connection` dialog and select the COM port that the gps receiver to which the gps receiver. U-Center seems pretty smart about showing the port that is most likely the gps receiver.
