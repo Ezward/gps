@@ -129,16 +129,43 @@ So much blue tape.  Anyway, the picture shows a DonkeyCar with a RaspberryPi con
 You will want to do 4 things with U-Center to get your gps module setup.  
 
 1. Install U-Center
+- Windows Installation
     - Download in the [U-Blox](https://www.u-blox.com/en/product/u-center) site and run the installer.
     - On windows you may need to install a driver so that the gps device is seen as a serial device so you can control it with U-Center.
         - See the 'Update Driver' section of this [Sparkfun tutorial](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox/all)
-    - Launch U-Center and connect to the gps receiver.
-        - Open the Receiver menu, then the connection dialog and select the COM port that the gps receiver to which the gps receiver. U-Center seems pretty smart about showing the port that is most likely the gps receiver.
-        - Open the Receiver menu, then the baudrate dialog and set the baudrate to match your gps receiver. If the ZED-F9P is still in its default state, then the baudrate should be 38400. If you have a knock-off gps receiver then it’s probably 9600 baud. RTFM if you can’t figure it out.
+- MacOS/Linux Installation
+    - Download and install [XQuartz](https://www.xquartz.org/index.html) 
+    - Download and install [PlayOnMac](https://www.playonmac.com/en/download.html) Windows emulation
+    - Download [U-Center installer](https://www.u-blox.com/en/product/u-center) for F9P, then double-click on it to install into PlayOnMac.
+    - Start PlayOnMac if it is not already started, then create a U-Center configuration.
+    - Map your Mac's serial device to a COM port in PlayOnMac
+        - Determine serial port’s device path.
+             - sometimes it is easier to do this in two steps.  (1) Before you plug-in your GPS receiver into the USB port, list the tty devices `ls /dev/tty*` (2) Plug your GPS receiver into the USB port and list the tty devices again.  The new tty device is your USB port.  Take note of the path.  Mine was `/dev/tty.usbmodem14101`.
+
+        - Create a symbolic link to the device in the PlayOnMac U-Center configuration `dosdevices` folder.  The folder was at `~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices` on my machine.  To create the symbolic link from the device to `com1` execute this command line in a console: 
+          ```
+          ln -s /dev/tty.usbmodem14101 ~/Library/PlayOnMac/wineprefix/U_Center_/dosdevices/com1
+          ```
+
+        - Update the system registry in the PlayOnMac U-Center to include the com port.  
+            - Open the system registry file in a text editor (use a code editor and not a word processor).  My system registry file was at `~/Library/PlayOnMac/wineprefix/U_Center_/system.reg`.  
+            - Find the section `[Software\\Wine\\Ports]` and add the line `"com1"="/dev/tty.usbmodem14101”`, using the com port and device path you used in the symbolic link.  Mine section ended up looking like this;
+            ```
+            [Software\\Wine\\Ports] 1663982657
+            #time=1d8cfb45d70ce78
+            "com1"="/dev/tty.usbmodem14101"
+            ```
+        - Save the file.  Now when you run U-Center from within PlayOnMac you should have `com1` available in the `Receiver/Connection` menu.
+        - Here is a video that shows this procedure [Running U-Center on MacOS](https://youtu.be/IHblD8iwjmA)
+        - That procedure was adapted from the standard Wine procedure shown in this [video](https://www.youtube.com/watch?v=41enNl9Vsig)
+
+2. Launch U-Center and connect to the gps receiver.
+    - Open the `Receiver` menu, then the `Connection` dialog and select the COM port that the gps receiver to which the gps receiver. U-Center seems pretty smart about showing the port that is most likely the gps receiver.
+    - Open the `Receiver` menu, then the `Baudrate` dialog and set the baudrate to match your gps receiver. If the ZED-F9P is still in its default state, then the baudrate should be 38400. If you have a knock-off gps receiver then it’s probably 9600 baud. RTFM if you can’t figure it out.
     - Once the COM port and baud rate are set then U-Center should connect with the GPS and display received data in the data view window. If nothing appears, check your connection and serial port parameters.
 
 
-2. You will want to increase the default baud rate on the serial ports.  
+3. You will want to increase the default baud rate on the serial ports.  
     - Start U-Center and connect your gps receiver to your computer that is running U-Center as described in (1) above.
     - Open the `View` menu, then the `Configuration` view and choose the `PRT (ports)` port configuration.
     - Update UART1 and UART2 to 115200 baud, selecting the `Save` button after each change.  This will update the gps module's live (ram) settings, but not write it to flash.  
@@ -146,14 +173,14 @@ You will want to do 4 things with U-Center to get your gps module setup.
     - Select the `Close` button and u-center will ask if you want to save the settings to flash, allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
         - Note that some gps receivers, like the SAM-M8Q, so not have flash.  Instead they have battery backed memory. So they won't save to flash, but you settings should stay intact as long as the battery is charged.
 
-3. You will want to increase the rate at which the gps receiver outputs position estimates.  By default, most gps receivers only output one per second.  That is a little slow for racing, so we want faster position updates.  The [ZED-F9P Data Sheet](https://content.u-blox.com/sites/default/files/ZED-F9P-04B_DataSheet_UBX-21044850.pdf) indicates that the max rate is 7hz when using 4 satellite systems, 10hz when using 3 satellite systems and 15hz when using two satellite systems.  More simultaneous satellite systems is more accurate, but slower.  We will take the compromise of 10hz.  Note that the NEO-8 is limited to an update rate of 5hz in order to maintain contact with two satellite system. 
+4. You will want to increase the rate at which the gps receiver outputs position estimates.  By default, most gps receivers only output one per second.  That is a little slow for racing, so we want faster position updates.  The [ZED-F9P Data Sheet](https://content.u-blox.com/sites/default/files/ZED-F9P-04B_DataSheet_UBX-21044850.pdf) indicates that the max rate is 7hz when using 4 satellite systems, 10hz when using 3 satellite systems and 15hz when using two satellite systems.  More simultaneous satellite systems is more accurate, but slower.  We will take the compromise of 10hz.  Note that the NEO-8 is limited to an update rate of 5hz in order to maintain contact with two satellite system. 
     - In u-center, open the `View` menu, then the `Configuration` view and then the `RATE (rates)` dialog.
     - Set the `Measurement Period` to 100ms to get a 10 hz update rate (NEO-8 owners should use 200ms for 5hz).
     - Select the `Save` button to save to the gps module's live settings to ram.
     - Select the `Close` button and u-center will ask if you want to save the settings to flash; allow it to open the save dialog, then choose the `Save` button and the changes will be written to flash so that the are applied each time the gps module starts.
         - Note that some gps receivers, like the SAM-M8Q, so not have flash.  Instead they have battery backed memory. So they won't save to flash, but you settings should stay intact as long as the battery is charged.
 
-4. If you are using RTK gps, you will also want to increase the resolution of the position values in the NMEA messages.  RTK outputs a higher resolution position than standard NMEA can handle (it doesn't provide enough decimal places in the position values), we we want to change that.
+5. If you are using RTK gps, you will also want to increase the resolution of the position values in the NMEA messages.  RTK outputs a higher resolution position than standard NMEA can handle (it doesn't provide enough decimal places in the position values), we we want to change that.
     - In u-center from the `View` menu, open the `Configuration` view and choose the `NMEA` configuration.
     - In the `Mode Flags` section, check the `High Precision Mode` checkbox.
     - Select the `Save` button to save to the gps module's live settings.
