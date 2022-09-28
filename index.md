@@ -566,3 +566,13 @@ ArduSimple makes gps boards and has excellent content.
 <br>
 Sparkfun makes lots of great stuff, including gps boards.  They are known for their excellent content explaining how to use their products.
 - https://learn.sparkfun.com/tutorials/what-is-gps-rtk
+  
+<br>
+Here is a good video from someone that uses the F9P RTK receivers to drive an autonomous lawn mower.  He goes though 3 or 4 different kinds of configurations using U-Center.  
+- https://www.youtube.com/watch?v=7r__F-nyKUA
+  
+<br>
+Here are a few videos I made regarding this subject.
+- [Donkeycar Meets GPS](https://youtu.be/q4T7kTaExTs)
+- [Running U-Center on MacOS](https://youtu.be/IHblD8iwjmA)
+- [Configure GPS with U-Center](https://youtu.be/GLtEtxPWoIk)
