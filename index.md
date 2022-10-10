@@ -556,7 +556,7 @@ The race was epic. It was everything you want from motorsports; passing, crashin
 Now that Donkeycar has the ability to race outside I hope that we will see a lot more competitors in our future races.
 
 #### Status of the Donkeycar branch
-I'm working on getting this branch into the [main Donkeycar branch](https://github.com/autorope/donkeycar).  There are a lot of changes, so I'm doing this over a few pull requests.  You can use the [921-gps-logger](https://github.com/autorope/donkeycar/tree/921-gps-logger) branch until that work is complete; you will know it is done when the 921-gps-logger branch no longer exists!
+I'm working on getting this branch into the [main Donkeycar branch](https://github.com/autorope/donkeycar).  There are a lot of changes, so I'm doing this over a few pull requests.  You can use the [921-gps-path-follow](https://github.com/autorope/donkeycar/tree/921-gps-path-follow) branch until that work is complete; you will know it is done when that branch no longer exists, at which point you should start using the main branch.
 
 
 ## Thanks, but is there someone around here that knows anything?
