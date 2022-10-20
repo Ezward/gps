@@ -206,6 +206,12 @@ U-Center can also be used to test your NTRIP server settings.
   U-Center accuracy
 </p>
 
+The meaning of the **Fix Mode** status in U-Center:
+
+- **“3D”**              fix mode:  3m CEP accuracy, no RTK
+- **“3D/GNSS”**         fix mode:  2.5m CEP accuracy, no RTK
+- **“3D/DGNSS/Float”**  fix mode: 20cm CEP, RTK position stabling
+- **“3D/DGNSS/FIXED”**  fix mode: 2cm CEP,  RTK position stabled
 
 ### RTKLIB
 U-Center is a Windows GUI application; it is not suitable for running on our RaspberryPi or Jetson Nano, so we need another way to read corrections from our NTRIP server.  RTKLIB is an open source software package written by Tomoji Takasu, that can use GNSS raw data to run real-time or post-processing solutions to accurately determine relative position using differential information from two receivers (RTK/PPK).  RTKLIB has way more capability than we will be using.  We really only need one of it's command line utilities; str2str (stream to stream).  str2str can connect to an NTRIP server and then write the corrections to up to 4 outputs.  It can convert formats if that is necessary; so it could take in RTCM2 corrections, but output RTCM3 corrections.
