@@ -40,7 +40,7 @@ I'm using a a different device from Sparkfun with a series 9 chipset, the [Spark
 Other companies produce receiver boards using the same U-Blox ZED-F9P chipset.  ArduSimple makes a number of different boards.  [This](https://www.mouser.com/ProductDetail/ArduSimple/AS-STARTKIT-BASIC-L1L2-NH-02?qs=GBLSl2Akiru%2FUw8RAcKyUw%3D%3D)  one includes the dual-band L1/L2 antenna and still costs a less than the SparkFun board without the antenna.  You can also get this one with the headers presoldered if you don't like melting metal for fun.  With the pass-through headers, it can be mounted on an Arduino Uno.
 
 <p align="center">
-  <img src="https://www.ardusimple.com/wp-content/uploads/2018/08/basic-kit-upgraded.png" style="height: 75%; width: 75%; display: block;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
+  <img src="https://www.ardusimple.com/wp-content/uploads/2018/08/basic-kit-upgraded.jpg" style="height: 75%; width: 75%; display: block;" alt="ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02" />
   <a href="https://www.ardusimple.com/product/simplertk2b-basic-starter-kit-ip65/">ArduSimple AS-STARTKIT-BASIC-L1L2-NH-02</a>
 </p>
 
