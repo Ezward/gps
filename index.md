@@ -256,7 +256,7 @@ In the field, like at a race track, you may not have nice fixed WiFi like you do
 While the RaspberryPi and Jetson Nano gpio headers look the same, we need to set them up slightly differently.  On both machines the operating system may be using the serial port on the gpio header as a login port (one culd hookup a terminal to it to login).  That could interfere with our usage of the port.  So we want to turn off that behavior.  Its a little different for RPi and Nano. 
 
 ##### The Jetson Nano serial port
-See this JetsonHacks [video](https://jetsonhacks.com/2019/10/10/jetson-nano-uart/) for using the serial ports on the Jetson Nano GPIO header. To output to Jetson Nano's serial port you must have permissions to read/write the serial port.  Run this command to add your user to the dialout group.
+See this JetsonHacks [video](https://jetsonhacks.com/2019/10/10/jetson-nano-uart/) for using the serial ports on the Jetson Nano GPIO header. To output to Jetson Nano's serial port you must have permissions to read/write the serial port.  Run this command to add your user to the dialout group, then reboot so it takes affect.
  ```
  sudo usermod -aG dialout $(whoami)
  ```
